@@ -1,0 +1,54 @@
+<div *ngIf="currentLocation | async">
+  <!-- {{ (currentLocation | async)?.simplifiedAddress }} -->
+  <!-- <pre>
+        {{ (currentLocation | async)?.position?.lat }}
+        {{ (currentLocation | async)?.position?.lng }}
+    </pre
+  > -->
+
+  <div class="mt-20 mb-20">
+    <app-debug-panel></app-debug-panel>
+  </div>
+
+  <app-actual-weather [actualWeather]="currentLocation"></app-actual-weather>
+</div>
+
+<div class="mt-20 text-center">
+  <button mat-button color="accent" [matMenuTriggerFor]="changeLocationMenu">
+    <mat-icon>edit_location_alt</mat-icon> Changer la localisation
+  </button>
+  <mat-menu #changeLocationMenu="matMenu">
+    <button mat-menu-item (click)="openAddSavedLocationDialog()">
+      <mat-icon>add_location_alt</mat-icon> Ajouter une nouvelle localisation
+    </button>
+    <button
+      mat-menu-item
+      [matMenuTriggerFor]="chooseFromSavedLocations"
+      [disabled]="!(savedLocations | async)?.length"
+    >
+      <mat-icon>bookmarks</mat-icon> Choisir depuis mes localisations
+    </button>
+    <mat-menu #chooseFromSavedLocations="matMenu">
+      <div *ngIf="(savedLocations | async)?.length">
+        <button
+          mat-menu-item
+          *ngFor="let location of savedLocations | async"
+          (click)="selectLocation(location)"
+        >
+          <span *ngIf="location.selected">
+            <mat-icon color="accent">where_to_vote</mat-icon>
+          </span>
+          {{ location.simplifiedAddress }}
+        </button>
+      </div>
+    </mat-menu>
+  </mat-menu>
+</div>
+
+<div class="mt-20">
+  <app-hours-weather [hours]="actualHoursWeather"></app-hours-weather>
+</div>
+
+<div class="mt-20">
+  <app-days-weather [days]="actualDaysWeather"></app-days-weather>
+</div>

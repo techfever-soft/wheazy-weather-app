@@ -1,0 +1,74 @@
+<mat-expansion-panel style="width: 350px; margin: 0 auto" class="mt-20 mb-20">
+  <mat-expansion-panel-header
+    >(debug) Temps & saison</mat-expansion-panel-header
+  >
+
+  <fieldset>
+    <legend>Temps actuel (24H)</legend>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Position du soleil</mat-label>
+      <input type="text" matInput [value]="currentDayTime | async" disabled />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Heure définie</mat-label>
+      <input
+        type="text"
+        matInput
+        [value]="(dayTimeAsNumber | async) + 'h'"
+        disabled
+      />
+    </mat-form-field>
+
+    <mat-slider
+      (valueChange)="timeChanged($event)"
+      [value]="dayTimeAsNumber | async"
+      tickInterval="1"
+      [thumbLabel]="true"
+      max="24"
+      min="1"
+      style="width: 100%"
+    ></mat-slider>
+
+    <div class="text-center">
+      <button mat-button color="warn" (click)="resetDayTime()">
+        <mat-icon>refresh</mat-icon> Rétablir à l'actuel
+      </button>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Saisons (12 saisons)</legend>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Saison définie</mat-label>
+      <input type="text" matInput [value]="currentSeason | async" disabled />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Mois défini</mat-label>
+      <input
+        type="text"
+        matInput
+        [value]="seasonAsNumber | async | amLocale: 'fr' | amDateFormat: 'MMMM'"
+        disabled
+      />
+    </mat-form-field>
+
+    <mat-slider
+      tickInterval="1"
+      max="12"
+      min="1"
+      style="width: 100%"
+      (valueChange)="seasonChanged($event)"
+      [value]="seasonAsNumber | async"
+    ></mat-slider>
+
+    <div class="text-center">
+      <button mat-button color="warn" (click)="resetSeason()">
+        <mat-icon>refresh</mat-icon> Rétablir à l'actuel
+      </button>
+    </div>
+  </fieldset>
+</mat-expansion-panel>

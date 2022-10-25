@@ -1,0 +1,66 @@
+<div class="text-center" mat-dialog-title>
+  <mat-icon color="accent">add_location_alt</mat-icon>
+  <h3 class="mat-h3">
+    <b>Ajouter une nouvelle localisation</b>
+  </h3>
+</div>
+
+<div mat-dialog-content>
+  <form [formGroup]="newLocationForm">
+    <div class="wheazy__form-layout">
+      <div class="text-center mb-20">
+        <button mat-raised-button color="primary" (click)="getUserLocation()">
+          <mat-icon>my_location</mat-icon> Utiliser ma géolocalisation
+        </button>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Entrez l'addresse de votre choix</mat-label>
+        <input
+          type="text"
+          matInput
+          placeholder="Commencez à écrire pour rechercher"
+          formControlName="place"
+          (input)="onAddressChange()"
+          #addressText
+        />
+        <button mat-icon-button matSuffix (click)="onAddressChange()">
+          <mat-icon>search</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <fieldset>
+        <legend class="text-icon">
+          <mat-icon>pin_drop</mat-icon> Placez votre localisation où vous
+          souhaitez
+        </legend>
+        <div *ngIf="mapsLoaded | async">
+          <google-map
+            [options]="mapOptions"
+            [center]="mapCenter"
+            [zoom]="mapZoom"
+            #map
+          >
+            <map-marker
+              [options]="markerOptions"
+              [position]="mapCenter"
+              (mapDragend)="dragMarkerEnd($event)"
+            ></map-marker>
+          </google-map>
+        </div>
+      </fieldset>
+    </div>
+  </form>
+</div>
+
+<div mat-dialog-actions class="justify-flex-center">
+  <button mat-button mat-dialog-close><mat-icon>close</mat-icon> Fermer</button>
+  <button
+    mat-raised-button
+    color="accent"
+    (click)="addLocation()"
+    [disabled]="newLocationForm.invalid"
+  >
+    <mat-icon>add</mat-icon> Ajouter cette localisation
+  </button>
+</div>

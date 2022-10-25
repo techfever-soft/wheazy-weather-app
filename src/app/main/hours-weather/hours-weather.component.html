@@ -1,0 +1,36 @@
+<div class="wheazy__weather">
+  <div mat-dialog-title class="text-center">
+    <mat-icon color="primary">today</mat-icon>
+    <h3 class="mat-h3">Prévisions de la journée</h3>
+  </div>
+
+  <div class="wheazy__weather__timeline">
+    <div
+      class="wheazy__weather__timeline--item {{ weather.now ? 'active' : '' }}"
+      *ngFor="let weather of hours"
+    >
+      <p class="mat-p">{{ weather.hour }} h 00</p>
+      <div class="mt-20 mb-20">
+        <mat-icon fontSet="material-symbols-sharp" class="hour-state-icon">
+          rainy
+        </mat-icon>
+        <p class="mat-caption">{{ weather.stateDescription }}</p>
+      </div>
+      <div class="mb-20">
+        <p class="mat-p text-muted">
+          {{ weather.minTemperature }}°C - {{ weather.maxTemperature }}°C
+        </p>
+      </div>
+      <div class="hour-metadatas">
+        <div class="metadata">
+          <mat-icon>air</mat-icon>
+          <p class="mat-caption">{{ weather.windSpeed }} km/h</p>
+        </div>
+        <div class="metadata">
+          <mat-icon>water_drop</mat-icon>
+          <p class="mat-caption">{{ weather.precipitations }} mm</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
