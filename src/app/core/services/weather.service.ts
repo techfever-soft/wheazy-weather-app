@@ -1,8 +1,18 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import * as SunCalc from 'suncalc';
-import { SunPosition } from '../interfaces/weather.interface';
+import {
+  LocationPoint,
+  SavedLocationPoint,
+} from '../interfaces/location.interface';
+import {
+  CurrentWeather,
+  DayWeather,
+  HourWeather,
+  SunPosition,
+} from '../interfaces/weather.interface';
+import { ApiService } from './api.service';
 import { LocationService } from './location.service';
 
 @Injectable({
@@ -20,10 +30,184 @@ export class WeatherService {
   private currentSeasonAsNumber$: BehaviorSubject<number> = new BehaviorSubject(
     0
   );
+  // private currentHoursWeather: BehaviorSubject<any[]> = new BehaviorSubject(
+  //   null
+  // );
+  private currentDaysWeather$: Subject<DayWeather[]> = new Subject();
+  private currentHourlyWeather$: Subject<HourWeather[]> = new Subject();
+  private currentWeather$: Subject<CurrentWeather> = new Subject();
 
-  constructor(private locationService: LocationService) {
+  constructor(
+    private locationService: LocationService,
+    private apiService: ApiService
+  ) {
     this.setActualDayTime();
     this.setActualSeason();
+
+    // On current location changed
+    this.locationService
+      .getCurrentLocation()
+      .subscribe((location: SavedLocationPoint) => {
+        this.fetchWeatherAtLocation(location);
+      });
+  }
+
+  // ANCHOR : get current weather
+  public getCurrentWeather(): Observable<CurrentWeather> {
+    return this.currentWeather$.asObservable();
+  }
+  // ANCHOR : get current hour weathers
+  public getCurrentWeatherHours(): Observable<HourWeather[]> {
+    return this.currentHourlyWeather$.asObservable();
+  }
+
+  public fetchWeatherAtLocation(location: SavedLocationPoint): void {
+    this.apiService
+      .fetchCurrentWeather(location)
+      .then((rawCurrentWeather: any) => {
+        const finalCurrentWeather = this.transformCurrentWeather(
+          location,
+          rawCurrentWeather
+        );
+
+        this.currentWeather$.next(finalCurrentWeather);
+      });
+
+    this.apiService.fetchHoursWeather(location).then((rawHoursWeather: any) => {
+      const finalHourlyWeather = this.transformHourlyWeather(
+        location,
+        rawHoursWeather
+      );
+
+      this.currentHourlyWeather$.next(finalHourlyWeather);
+    });
+
+    // this.apiService.fetchDayWeather(
+    //   location.position.lat,
+    //   location.position.lng
+    // );
+
+    // .then((days: DayWeather[]) => {
+    //   this.currentDaysWeather = days;
+    // });
+  }
+
+  private transformHourlyWeather(
+    location: SavedLocationPoint,
+    rawHoursWeather: any
+  ): HourWeather[] {
+    let newHourWeather: HourWeather[] = [];
+
+    for (let i = 0; i < 12; i++) {
+      const hourlyWeather: HourWeather = {
+        isNow: i === 0 ? true : false,
+        hour: moment().add(i, 'hours').format('HH'),
+        icon: this.translateWeatherIcon(
+          rawHoursWeather.weatherCode[i],
+          moment().add(i, 'hours')
+        ),
+        description: this.translateWeatherDescription(
+          rawHoursWeather.weatherCode[i]
+        ),
+        windSpeed: rawHoursWeather.windSpeed[i],
+        precipitation: rawHoursWeather.precipitation[i],
+        currentTemperature: rawHoursWeather.temperature[i],
+        humidity: rawHoursWeather.humidity[i],
+      };
+      newHourWeather.push(hourlyWeather);
+    }
+
+    // rawHoursWeather.forEach((hour: any) => {
+    //   const hourlyWeather: HourWeather = {
+    //     isNow: true,
+    //     icon: this.translateWeatherIcon(hour.weatherCode),
+    //     description: this.translateWeatherDescription(hour.weatherCode),
+    //     windSpeed: hour.windSpeed,
+    //     precipitation: hour.precipitation,
+    //     currentTemperature: hour.temperature,
+    //     humidity: hour.humidity,
+    //   };
+    //   newHourWeather.push(hourlyWeather);
+    // });
+
+    return newHourWeather;
+  }
+
+  private transformCurrentWeather(
+    location: SavedLocationPoint,
+    rawWeather: any
+  ): CurrentWeather {
+    const currentWeather: CurrentWeather = {
+      place: location,
+      icon: this.translateWeatherIcon(rawWeather.weatherCode),
+      description: this.translateWeatherDescription(rawWeather.weatherCode),
+      currentTemperature: rawWeather.currentTemperature,
+      windSpeed: rawWeather.windSpeed,
+      minTemperature: rawWeather.minTemperature,
+      maxTemperature: rawWeather.maxTemperature,
+      precipitation: rawWeather.precipitation,
+      humidity: rawWeather.humidity,
+    };
+
+    return currentWeather;
+  }
+
+  private translateWeatherIcon(
+    code: number,
+    timestamp?: moment.Moment
+  ): string {
+    let icon: string = '';
+
+    const dayTime = timestamp
+      ? timestamp.hours()
+      : this.currentDayTimeAsNumber$.getValue();
+
+    if (dayTime < 6 || dayTime > 21) {
+      if (code === 0) {
+        icon = 'nightlight';
+      }
+      if (code === 1 || code === 2 || code === 3) {
+        icon = 'nights_stay';
+      }
+    } else {
+      if (code === 0) {
+        icon = 'clear_day';
+      }
+      if (code === 1 || code === 2 || code === 3) {
+        icon = 'partly_cloudy_day';
+      }
+    }
+
+    if (code === 45 || code === 48) {
+      icon = 'foggy';
+    }
+    if (code === 61 || code === 63 || code === 65) {
+      icon = 'rainy';
+    }
+    if (code === 80 || code === 81 || code === 82) {
+      icon = 'rainy';
+    }
+    if (code === 95 || code === 96 || code === 99) {
+      icon = 'thunderstorm';
+    }
+    if (code === 71 || code === 85) {
+      icon = 'sunny_snowing';
+    }
+    if (code === 73 || code === 75 || code === 86) {
+      icon = 'cloudy_snowing';
+    }
+    if (code === 77) {
+      icon = 'snowing';
+    }
+    if (code === 51 || code === 53 || code === 55) {
+      icon = 'grain';
+    }
+
+    return icon ? icon : 'help';
+  }
+
+  private translateWeatherDescription(code: number) {
+    return 'Temps nuageux';
   }
 
   public setActualDayTime() {
@@ -120,10 +304,31 @@ export class WeatherService {
 
       this.currentDayTimeAsNumber$.next(now.get('hours'));
 
+      this.locationService
+        .getCurrentLocation()
+        .subscribe((currentLocation: SavedLocationPoint) => {
+          this.getSunStateAtLocation(now.toDate(), currentLocation).then(
+            (state: string) => {
+              currentState = state;
+
+              this.currentDayTime$.next(currentState);
+            }
+          );
+        });
+    }
+  }
+
+  public getSunStateAtLocation(
+    time: Date,
+    point: SavedLocationPoint
+  ): Promise<string> {
+    return new Promise((resolve, reject) => {
+      let currentState;
+
       let times: SunPosition = SunCalc.getTimes(
-        now.toDate(),
-        this.locationService.getCurrentLocationNative().position.lat,
-        this.locationService.getCurrentLocationNative().position.lng
+        time,
+        point.position.lat,
+        point.position.lng
       );
 
       let sunrise = moment().diff(times.sunrise, 'hour');
@@ -133,13 +338,13 @@ export class WeatherService {
       let dusk = moment().diff(times.dusk, 'hour');
       let goldenHourEnd = moment().diff(times.goldenHourEnd, 'hour');
       let solarNoon = moment().diff(times.solarNoon, 'hour');
-      let goldenHour = moment().diff(times.solarNoon, 'hour');
-      let sunset = moment().diff(times.solarNoon, 'hour');
-      let nauticalDusk = moment().diff(times.solarNoon, 'hour');
-      let night = moment().diff(times.solarNoon, 'hour');
-      let nadir = moment().diff(times.solarNoon, 'hour');
-      let nightEnd = moment().diff(times.solarNoon, 'hour');
-      let nauticalDawn = moment().diff(times.solarNoon, 'hour');
+      let goldenHour = moment().diff(times.goldenHour, 'hour');
+      let sunset = moment().diff(times.sunset, 'hour');
+      let nauticalDusk = moment().diff(times.nauticalDusk, 'hour');
+      let night = moment().diff(times.night, 'hour');
+      let nadir = moment().diff(times.nadir, 'hour');
+      let nightEnd = moment().diff(times.nightEnd, 'hour');
+      let nauticalDawn = moment().diff(times.nauticalDawn, 'hour');
 
       // NOTE: for debugging sun states
       // console.log('sunrise =>' + sunrise);
@@ -196,13 +401,18 @@ export class WeatherService {
         currentState = 'nauticalDawn';
       }
 
-      this.currentDayTime$.next(currentState);
-    }
+      if (currentState) {
+        resolve(currentState);
+      } else {
+        reject('currentState not detected');
+      }
+    });
   }
 
   public getCurrentDayTime(): Observable<string> {
     return this.currentDayTime$.asObservable();
   }
+
   public getCurrentDayTimeAsNumber(): Observable<number> {
     return this.currentDayTimeAsNumber$.asObservable();
   }
@@ -210,6 +420,7 @@ export class WeatherService {
   public getCurrentSeason(): Observable<string> {
     return this.currentSeason$.asObservable();
   }
+
   public getCurrentSeasonAsNumber(): Observable<number> {
     return this.currentSeasonAsNumber$.asObservable();
   }

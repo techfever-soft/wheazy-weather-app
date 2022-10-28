@@ -62,6 +62,8 @@ export class LocationService {
     newLocation.selected = true;
 
     this.currentLocation$.next(newLocation);
+
+    window.localStorage.setItem('currentLocation', JSON.stringify(newLocation));
   }
 
   public set savedLocations(newLocation: SavedLocationPoint) {
@@ -69,6 +71,8 @@ export class LocationService {
     newLocationsArray.push(newLocation);
 
     this.savedLocations$.next(newLocationsArray);
+
+    window.localStorage.setItem('savedLocations', JSON.stringify(newLocationsArray));
   }
 
   public getCurrentLocationNative(): SavedLocationPoint {
@@ -84,6 +88,13 @@ export class LocationService {
   }
 
   public getSavedLocations(): Observable<SavedLocationPoint[]> {
+    const rawSavedLocations = window.localStorage.getItem('savedLocations') as string;
+    const savedLocationStorage = JSON.parse(rawSavedLocations) as SavedLocationPoint[];
+
+    if (savedLocationStorage && savedLocationStorage.length) {
+    this.savedLocations$.next(savedLocationStorage);
+    }
+
     return this.savedLocations$.asObservable();
   }
 

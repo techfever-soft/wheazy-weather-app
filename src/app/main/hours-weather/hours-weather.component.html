@@ -6,19 +6,22 @@
 
   <div class="wheazy__weather__timeline">
     <div
-      class="wheazy__weather__timeline--item {{ weather.now ? 'active' : '' }}"
+      class="wheazy__weather__timeline--item {{ weather.isNow ? 'active' : '' }}"
       *ngFor="let weather of hours"
     >
       <p class="mat-p">{{ weather.hour }} h 00</p>
-      <div class="mt-20 mb-20">
+      <div class="mt-20 mb-10">
         <mat-icon fontSet="material-symbols-sharp" class="hour-state-icon">
-          rainy
+          {{ weather.icon }}
         </mat-icon>
-        <p class="mat-caption">{{ weather.stateDescription }}</p>
       </div>
       <div class="mb-20">
-        <p class="mat-p text-muted">
-          {{ weather.minTemperature }}°C - {{ weather.maxTemperature }}°C
+        <p class="mat-p">
+          {{ weather.currentTemperature }}°C
+          <!-- {{ weather.minTemperature }}°C - {{ weather.maxTemperature }}°C -->
+        </p>
+        <p class="mat-caption text-muted">
+          {{ weather.description }}
         </p>
       </div>
       <div class="hour-metadatas">
@@ -28,7 +31,7 @@
         </div>
         <div class="metadata">
           <mat-icon>water_drop</mat-icon>
-          <p class="mat-caption">{{ weather.precipitations }} mm</p>
+          <p class="mat-caption">{{ weather.precipitation }} mm</p>
         </div>
       </div>
     </div>

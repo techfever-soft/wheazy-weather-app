@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { DayWeather } from 'src/app/core/interfaces/weather.interface';
 
 @Component({
   selector: 'app-days-weather',
@@ -6,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./days-weather.component.scss']
 })
 export class DaysWeatherComponent implements OnInit {
-  @Input('days') days!: any[];
+  @Input('days') days!: DayWeather[];
 
   constructor() { }
 

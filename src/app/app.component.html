@@ -1,12 +1,12 @@
 <mat-toolbar color="primary">
-  <button mat-icon-button (click)="drawer.toggle()">
-    <mat-icon>{{ drawer.opened ? "close" : "menu" }}</mat-icon>
+  <button mat-icon-button (click)="toggleDrawer()">
+    <mat-icon>{{ drawerOpened ? "close" : "menu" }}</mat-icon>
   </button>
   <h1 class="mat-h1">Wheazy</h1>
 </mat-toolbar>
 
 <mat-drawer-container autosize>
-  <mat-drawer mode="side" [opened]="true" #drawer>
+  <mat-drawer mode="side" [opened]="drawerOpened">
     <div class="text-center mt-20 mb-20">
       <h1 class="mat-h1"><b>Wheazy</b></h1>
       <div class="mt-10">
@@ -28,7 +28,7 @@
         }}"
         mat-list-item
         *ngFor="let location of savedLocations | async; let index = index"
-        (click)="selectLocation(location); drawer.close()"
+        (click)="selectLocation(location); closeDrawer()"
         cdkDrag
         (cdkDragDropped)="onLocationDropped($event)"
         [cdkDragDisabled]="(savedLocations | async)?.length === 1"
@@ -58,7 +58,7 @@
         </button>
       </a>
     </mat-nav-list>
-    <div class="mt-10 mb-20 text-center">
+    <div class="mt-20 mb-20 text-center">
       <button
         mat-fab
         color="primary"

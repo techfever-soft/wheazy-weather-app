@@ -6,16 +6,18 @@
 
   <div class="wheazy__weather__timeline">
     <div
-      class="wheazy__weather__timeline--item {{ weather.now ? 'active' : '' }}"
+      class="wheazy__weather__timeline--item {{
+        weather.isNow ? 'active' : ''
+      }}"
       *ngFor="let weather of days"
     >
-      <p class="mat-p">{{ weather.day }}</p>
+      <p class="mat-p">{{ weather.currentDay }}</p>
       <p class="mat-caption text-muted">({{ weather.fullDate }})</p>
       <div class="mt-20 mb-20">
         <mat-icon fontSet="material-symbols-sharp" class="hour-state-icon">
           rainy
         </mat-icon>
-        <p class="mat-caption">{{ weather.stateDescription }}</p>
+        <p class="mat-caption">{{ weather.description }}</p>
       </div>
       <div class="mb-20">
         <p class="mat-p text-muted">25°C - 26.3°C</p>

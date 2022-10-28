@@ -1,5 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import build from 'src/build';
 import { SavedLocationPoint } from './core/interfaces/location.interface';
@@ -21,6 +22,8 @@ export class AppComponent {
 
   public version: string = build.version;
 
+  public drawerOpened = false;
+
   constructor(
     private locationService: LocationService,
     private weatherService: WeatherService
@@ -33,6 +36,14 @@ export class AppComponent {
     this.currentDayTime = this.weatherService.getCurrentDayTime();
     this.currentDayTimeAsNumber =
       this.weatherService.getCurrentDayTimeAsNumber();
+  }
+
+  public toggleDrawer() {
+    this.drawerOpened = !this.drawerOpened;
+  }
+
+  public closeDrawer() {
+    this.drawerOpened = false;
   }
 
   public selectLocation(location: SavedLocationPoint) {
@@ -48,10 +59,14 @@ export class AppComponent {
   }
 
   public onLocationDropped(event: CdkDragDrop<SavedLocationPoint>) {
-    moveItemInArray(
-      this.locationService.getSavedLocationsNative(),
-      event.previousIndex,
-      event.currentIndex
-    );
+    this.locationService
+      .getSavedLocations()
+      .subscribe((savedLocations: SavedLocationPoint[]) => {
+        moveItemInArray(
+          savedLocations,
+          event.previousIndex,
+          event.currentIndex
+        );
+      });
   }
 }

@@ -12,6 +12,11 @@
     "version:major": "npm version major --force && angular-build-info"
   },
   "private": true,
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false
+  },
   "dependencies": {
     "@angular/animations": "~12.2.0",
     "@angular/cdk": "^12.2.0",
@@ -25,10 +30,13 @@
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
     "@awesome-cordova-plugins/geolocation": "^6.1.0",
+    "@mapbox/timespace": "^2.0.4",
     "@types/google.maps": "^3.50.4",
     "@types/uuid": "^8.3.4",
+    "geo-tz": "^7.0.3",
     "material-symbols": "^0.2.14",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.38",
     "ngx-moment": "^6.0.2",
     "rxjs": "~6.6.0",
     "suncalc": "^1.9.0",
