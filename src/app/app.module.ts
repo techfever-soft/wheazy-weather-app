@@ -18,6 +18,7 @@ import { DaysWeatherComponent } from './main/days-weather/days-weather.component
 import { MomentModule } from 'ngx-moment';
 import { WeatherLayoutComponent } from './main/weather-layout/weather-layout.component';
 import { DebugPanelComponent } from './main/debug-panel/debug-panel.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { DebugPanelComponent } from './main/debug-panel/debug-panel.component';
     MaterialModule,
     GoogleMapsModule,
     MomentModule,
+    NgxSkeletonLoaderModule
   ],
   providers: [Geolocation, LocationService],
   bootstrap: [AppComponent],

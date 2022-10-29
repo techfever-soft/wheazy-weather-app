@@ -1,10 +1,176 @@
-<div class="wheazy__actual-weather">
+<div
+  class="wheazy__actual-weather"
+  *ngIf="isLoading"
+>
+  <div class="wheazy__actual-weather__wrapper">
+    <div class="wheazy__actual-weather__wrapper--main">
+      <div class="actual-state-location">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '20px',
+            height: '20px'
+          }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '75px' }"
+        ></ngx-skeleton-loader>
+      </div>
+      <div class="actual-state-hour mt-10">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '20px',
+            height: '20px'
+          }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '125px' }"
+        ></ngx-skeleton-loader>
+      </div>
+      <div class="actual-state">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '50px',
+            height: '50px',
+            'margin-right': '10px'
+          }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '125px',
+            height: '50px'
+          }"
+        ></ngx-skeleton-loader>
+      </div>
+      <div class="actual-state-description">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '150px' }"
+        ></ngx-skeleton-loader>
+      </div>
+    </div>
+    <div class="wheazy__actual-weather__wrapper--metadatas">
+      <div class="item">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '25px',
+            height: '25px'
+          }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '100px' }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '50px' }"
+        ></ngx-skeleton-loader>
+      </div>
+      <div class="item">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '25px',
+            height: '25px'
+          }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '100px' }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '50px' }"
+        ></ngx-skeleton-loader>
+      </div>
+      <div class="item">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '25px',
+            height: '25px'
+          }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '100px' }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '50px' }"
+        ></ngx-skeleton-loader>
+      </div>
+      <div class="item">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '25px',
+            height: '25px'
+          }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '100px' }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '50px' }"
+        ></ngx-skeleton-loader>
+      </div>
+      <div class="item">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '25px',
+            height: '25px'
+          }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '100px' }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '50px' }"
+        ></ngx-skeleton-loader>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="wheazy__actual-weather"
+  *ngIf="!isLoading"
+>
   <div class="wheazy__actual-weather__wrapper">
     <div class="wheazy__actual-weather__wrapper--main">
       <div class="actual-state-location">
         <mat-icon>location_on</mat-icon>
         <p class="mat-p text-muted">
-          {{ (currentWeather | async)?.place?.simplifiedAddress }}
+          {{ currentWeather?.place?.simplifiedAddress }}
         </p>
       </div>
       <div class="actual-state-hour mt-10">
@@ -15,51 +181,39 @@
       </div>
       <div class="actual-state">
         <mat-icon fontSet="material-symbols-sharp">
-          {{ (currentWeather | async)?.icon }}
+          {{ currentWeather?.icon }}
         </mat-icon>
-        <h1 class="mat-h1">
-          {{ (currentWeather | async)?.currentTemperature }} °C
-        </h1>
+        <h1 class="mat-h1">{{ currentWeather?.currentTemperature }}°C</h1>
       </div>
       <div class="actual-state-description text-muted">
-        <p class="mat-p">{{ (currentWeather | async)?.description }}</p>
+        <p class="mat-p">{{ currentWeather?.description }}</p>
       </div>
     </div>
     <div class="wheazy__actual-weather__wrapper--metadatas">
       <div class="item">
         <mat-icon>air</mat-icon>
         <p class="mat-p text-muted item-title">Vitesse du vent</p>
-        <p class="mat-p item-value">
-          {{ (currentWeather | async)?.windSpeed }} km/h
-        </p>
+        <p class="mat-p item-value">{{ currentWeather?.windSpeed }} km/h</p>
       </div>
       <div class="item">
         <mat-icon>water_drop</mat-icon>
         <p class="mat-p text-muted item-title">Précipitations</p>
-        <p class="mat-p item-value">
-          {{ (currentWeather | async)?.precipitation }} mm
-        </p>
+        <p class="mat-p item-value">{{ currentWeather?.precipitation }} mm</p>
       </div>
       <div class="item">
         <mat-icon>snowing</mat-icon>
         <p class="mat-p text-muted item-title">Humidité</p>
-        <p class="mat-p item-value">
-          {{ (currentWeather | async)?.humidity }} %
-        </p>
+        <p class="mat-p item-value">{{ currentWeather?.humidity }} %</p>
       </div>
       <div class="item">
         <mat-icon>arrow_circle_up</mat-icon>
         <p class="mat-p text-muted item-title">Température maximale</p>
-        <p class="mat-p item-value">
-          {{ (currentWeather | async)?.maxTemperature }} °C
-        </p>
+        <p class="mat-p item-value">{{ currentWeather?.maxTemperature }} °C</p>
       </div>
       <div class="item">
         <mat-icon>arrow_circle_down</mat-icon>
         <p class="mat-p text-muted item-title">Température minimale</p>
-        <p class="mat-p item-value">
-          {{ (currentWeather | async)?.minTemperature }} °C
-        </p>
+        <p class="mat-p item-value">{{ currentWeather?.minTemperature }} °C</p>
       </div>
     </div>
   </div>

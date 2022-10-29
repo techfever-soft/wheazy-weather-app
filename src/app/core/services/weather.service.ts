@@ -30,12 +30,10 @@ export class WeatherService {
   private currentSeasonAsNumber$: BehaviorSubject<number> = new BehaviorSubject(
     0
   );
-  // private currentHoursWeather: BehaviorSubject<any[]> = new BehaviorSubject(
-  //   null
-  // );
-  private currentDaysWeather$: Subject<DayWeather[]> = new Subject();
-  private currentHourlyWeather$: Subject<HourWeather[]> = new Subject();
+
   private currentWeather$: Subject<CurrentWeather> = new Subject();
+  private currentHourlyWeather$: Subject<HourWeather[]> = new Subject();
+  private currentDaysWeather$: Subject<DayWeather[]> = new Subject();
 
   constructor(
     private locationService: LocationService,
@@ -44,7 +42,7 @@ export class WeatherService {
     this.setActualDayTime();
     this.setActualSeason();
 
-    // On current location changed
+    // NOTE: On current location changed
     this.locationService
       .getCurrentLocation()
       .subscribe((location: SavedLocationPoint) => {
@@ -52,16 +50,8 @@ export class WeatherService {
       });
   }
 
-  // ANCHOR : get current weather
-  public getCurrentWeather(): Observable<CurrentWeather> {
-    return this.currentWeather$.asObservable();
-  }
-  // ANCHOR : get current hour weathers
-  public getCurrentWeatherHours(): Observable<HourWeather[]> {
-    return this.currentHourlyWeather$.asObservable();
-  }
-
   public fetchWeatherAtLocation(location: SavedLocationPoint): void {
+    // ANCHOR : get current weather
     this.apiService
       .fetchCurrentWeather(location)
       .then((rawCurrentWeather: any) => {
@@ -73,6 +63,7 @@ export class WeatherService {
         this.currentWeather$.next(finalCurrentWeather);
       });
 
+    // ANCHOR : get current hour weathers
     this.apiService.fetchHoursWeather(location).then((rawHoursWeather: any) => {
       const finalHourlyWeather = this.transformHourlyWeather(
         location,
@@ -82,14 +73,45 @@ export class WeatherService {
       this.currentHourlyWeather$.next(finalHourlyWeather);
     });
 
-    // this.apiService.fetchDayWeather(
-    //   location.position.lat,
-    //   location.position.lng
-    // );
+    // ANCHOR : get current week weather
+    this.apiService.fetchWeekWeather(location).then((rawWeekWeather: any) => {
+      const finalWeekWeather = this.transformWeekWeather(
+        location,
+        rawWeekWeather
+      );
 
-    // .then((days: DayWeather[]) => {
-    //   this.currentDaysWeather = days;
-    // });
+      this.currentDaysWeather$.next(finalWeekWeather);
+    });
+  }
+
+  private transformWeekWeather(
+    location: SavedLocationPoint,
+    rawWeekWeather: any
+  ): DayWeather[] {
+    let newWeekWeather: DayWeather[] = [];
+
+    for (let i = 0; i < 7; i++) {
+      const weekWeather: DayWeather = {
+        isNow: i == 0 ? true : false,
+        currentDay: moment().add(i, 'days').locale('fr').format('dddd'),
+        precipitation: rawWeekWeather.precipitation[i],
+        fullDate: moment(rawWeekWeather.date[i]).locale('fr').format('Do MMMM'),
+        minTemperature: rawWeekWeather.minTemperature[i],
+        maxTemperature: rawWeekWeather.maxTemperature[i],
+        windSpeed: rawWeekWeather.windSpeed[i],
+        icon: this.translateWeatherIcon(
+          rawWeekWeather.weatherCode[i],
+          moment().add(i, 'hours')
+        ),
+        description: this.translateWeatherDescription(
+          rawWeekWeather.weatherCode[i]
+        ),
+      };
+
+      newWeekWeather.push(weekWeather);
+    }
+
+    return newWeekWeather;
   }
 
   private transformHourlyWeather(
@@ -100,7 +122,7 @@ export class WeatherService {
 
     for (let i = 0; i < 12; i++) {
       const hourlyWeather: HourWeather = {
-        isNow: i === 0 ? true : false,
+        isNow: i == 0 ? true : false,
         hour: moment().add(i, 'hours').format('HH'),
         icon: this.translateWeatherIcon(
           rawHoursWeather.weatherCode[i],
@@ -116,19 +138,6 @@ export class WeatherService {
       };
       newHourWeather.push(hourlyWeather);
     }
-
-    // rawHoursWeather.forEach((hour: any) => {
-    //   const hourlyWeather: HourWeather = {
-    //     isNow: true,
-    //     icon: this.translateWeatherIcon(hour.weatherCode),
-    //     description: this.translateWeatherDescription(hour.weatherCode),
-    //     windSpeed: hour.windSpeed,
-    //     precipitation: hour.precipitation,
-    //     currentTemperature: hour.temperature,
-    //     humidity: hour.humidity,
-    //   };
-    //   newHourWeather.push(hourlyWeather);
-    // });
 
     return newHourWeather;
   }
@@ -423,5 +432,17 @@ export class WeatherService {
 
   public getCurrentSeasonAsNumber(): Observable<number> {
     return this.currentSeasonAsNumber$.asObservable();
+  }
+
+  public getCurrentWeather(): Observable<CurrentWeather> {
+    return this.currentWeather$.asObservable();
+  }
+
+  public getCurrentWeatherHours(): Observable<HourWeather[]> {
+    return this.currentHourlyWeather$.asObservable();
+  }
+
+  public getCurrentWeatherWeek(): Observable<DayWeather[]> {
+    return this.currentDaysWeather$.asObservable();
   }
 }

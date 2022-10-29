@@ -1,37 +1,141 @@
-<div class="wheazy__weather">
+<div class="wheazy__weather" *ngIf="!days.length">
   <div mat-dialog-title class="text-center">
-    <mat-icon color="primary">date_range</mat-icon>
-    <h3 class="mat-h3">Prévisions de la semaine</h3>
+    <ngx-skeleton-loader
+      animation="progress-dark"
+      appearance="circle"
+      [theme]="{
+        background: 'rgba(255,255,255, 0.25)',
+        width: '25px',
+        height: '25px'
+      }"
+    ></ngx-skeleton-loader>
+    <br />
+    <ngx-skeleton-loader
+      animation="progress-dark"
+      [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '75px' }"
+    ></ngx-skeleton-loader>
   </div>
 
   <div class="wheazy__weather__timeline">
-    <div
+    <a
+      matRipple
+      href="javascript:void(0)"
+      class="wheazy__weather__timeline--item hoverable"
+      *ngFor="let weather of fakeDays"
+    >
+      <ngx-skeleton-loader
+        animation="progress-dark"
+        [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '25px' }"
+      ></ngx-skeleton-loader>
+      <br />
+      <ngx-skeleton-loader
+        animation="progress-dark"
+        [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '75px' }"
+      ></ngx-skeleton-loader>
+      <div
+        style="display: flex; flex-direction: column; align-items: center"
+        class="mt-10 mb-10"
+      >
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '35px',
+            height: '35px'
+          }"
+        ></ngx-skeleton-loader>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '75px' }"
+        ></ngx-skeleton-loader>
+        <div>
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '100px' }"
+          ></ngx-skeleton-loader>
+        </div>
+        <div class="hour-metadatas">
+          <div class="metadata">
+            <ngx-skeleton-loader
+              animation="progress-dark"
+              appearance="circle"
+              [theme]="{
+                background: 'rgba(255,255,255, 0.25)',
+                width: '20px',
+                height: '20px'
+              }"
+            ></ngx-skeleton-loader>
+            <br />
+            <ngx-skeleton-loader
+              animation="progress-dark"
+              [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '50px' }"
+            ></ngx-skeleton-loader>
+          </div>
+          <div class="metadata">
+            <ngx-skeleton-loader
+              animation="progress-dark"
+              appearance="circle"
+              [theme]="{
+                background: 'rgba(255,255,255, 0.25)',
+                width: '20px',
+                height: '20px'
+              }"
+            ></ngx-skeleton-loader>
+            <br />
+            <ngx-skeleton-loader
+              animation="progress-dark"
+              [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '50px' }"
+            ></ngx-skeleton-loader>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<div class="wheazy__weather" *ngIf="days.length">
+  <div mat-dialog-title class="text-center">
+    <mat-icon color="primary">date_range</mat-icon>
+    <h3 class="mat-h3">Semaine</h3>
+  </div>
+
+  <div class="wheazy__weather__timeline">
+    <!-- 
+      TODO: display day on click
+       class="wheazy__weather__timeline--item hoverable {{
+        weather.isNow ? 'active' : ''
+      }}"
+     -->
+    <a
       class="wheazy__weather__timeline--item {{
         weather.isNow ? 'active' : ''
       }}"
       *ngFor="let weather of days"
     >
       <p class="mat-p">{{ weather.currentDay }}</p>
-      <p class="mat-caption text-muted">({{ weather.fullDate }})</p>
+      <p class="mat-caption text-muted">{{ weather.fullDate }}</p>
       <div class="mt-20 mb-20">
         <mat-icon fontSet="material-symbols-sharp" class="hour-state-icon">
-          rainy
+          {{ weather.icon }}
         </mat-icon>
         <p class="mat-caption">{{ weather.description }}</p>
       </div>
       <div class="mb-20">
-        <p class="mat-p text-muted">25°C - 26.3°C</p>
+        <p class="mat-p text-muted">
+          {{ weather.minTemperature }}°C - {{ weather.maxTemperature }}°C
+        </p>
       </div>
       <div class="hour-metadatas">
         <div class="metadata">
           <mat-icon>air</mat-icon>
-          <p class="mat-caption">15 km/h</p>
+          <p class="mat-caption">{{ weather.windSpeed }} km/h</p>
         </div>
         <div class="metadata">
           <mat-icon>water_drop</mat-icon>
-          <p class="mat-caption">17 mm</p>
+          <p class="mat-caption">{{ weather.precipitation }} mm</p>
         </div>
       </div>
-    </div>
+    </a>
   </div>
 </div>

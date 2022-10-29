@@ -49,6 +49,7 @@ export class LocationService {
         selected: false,
       },
     ]);
+
   private currentLocation$: BehaviorSubject<SavedLocationPoint> =
     new BehaviorSubject(this.savedLocations$.getValue()[0]);
 
@@ -72,7 +73,23 @@ export class LocationService {
 
     this.savedLocations$.next(newLocationsArray);
 
-    window.localStorage.setItem('savedLocations', JSON.stringify(newLocationsArray));
+    window.localStorage.setItem(
+      'savedLocations',
+      JSON.stringify(newLocationsArray)
+    );
+  }
+
+  public deleteSavedLocation(index: number) {
+    let newLocationsArray = this.savedLocations$.getValue();
+    newLocationsArray.splice(index, 1);
+
+    this.savedLocations$.next(newLocationsArray);
+  }
+
+  public openAddLocationDialog() {
+    this.matDialog.open(AddSavedLocationDialogComponent, {
+      // maxHeight: '500px',
+    });
   }
 
   public getCurrentLocationNative(): SavedLocationPoint {
@@ -88,26 +105,18 @@ export class LocationService {
   }
 
   public getSavedLocations(): Observable<SavedLocationPoint[]> {
-    const rawSavedLocations = window.localStorage.getItem('savedLocations') as string;
-    const savedLocationStorage = JSON.parse(rawSavedLocations) as SavedLocationPoint[];
+    const rawSavedLocations = window.localStorage.getItem(
+      'savedLocations'
+    ) as string;
+    
+    const savedLocationStorage = JSON.parse(
+      rawSavedLocations
+    ) as SavedLocationPoint[];
 
     if (savedLocationStorage && savedLocationStorage.length) {
-    this.savedLocations$.next(savedLocationStorage);
+      this.savedLocations$.next(savedLocationStorage);
     }
 
     return this.savedLocations$.asObservable();
-  }
-
-  public deleteSavedLocation(index: number) {
-    let newLocationsArray = this.savedLocations$.getValue();
-    newLocationsArray.splice(index, 1);
-
-    this.savedLocations$.next(newLocationsArray);
-  }
-
-  public openAddLocationDialog() {
-    this.matDialog.open(AddSavedLocationDialogComponent, {
-      // maxHeight: '500px',
-    });
   }
 }

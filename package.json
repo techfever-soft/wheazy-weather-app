@@ -38,6 +38,7 @@
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.38",
     "ngx-moment": "^6.0.2",
+    "ngx-skeleton-loader": "^6.0.0",
     "rxjs": "~6.6.0",
     "suncalc": "^1.9.0",
     "tslib": "^2.3.0",

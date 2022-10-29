@@ -59,14 +59,10 @@ export class AppComponent {
   }
 
   public onLocationDropped(event: CdkDragDrop<SavedLocationPoint>) {
-    this.locationService
-      .getSavedLocations()
-      .subscribe((savedLocations: SavedLocationPoint[]) => {
-        moveItemInArray(
-          savedLocations,
-          event.previousIndex,
-          event.currentIndex
-        );
-      });
+    moveItemInArray(
+      this.locationService.getSavedLocationsNative(),
+      event.previousIndex,
+      event.currentIndex
+    );
   }
 }

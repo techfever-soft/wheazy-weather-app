@@ -1,4 +1,4 @@
-import { LocationPoint, SavedLocationPoint } from './location.interface';
+import { SavedLocationPoint } from './location.interface';
 
 export interface SunPosition {
   sunrise: Date;
@@ -24,14 +24,13 @@ export interface Weather {
   maxTemperature?: number;
   windSpeed: number;
   precipitation: number;
-  humidity: number;
+  humidity?: number;
 }
 
 export interface DayWeather extends Weather {
   isNow: boolean;
   currentDay: string;
   fullDate: string;
-  averageTemperature: number;
 }
 
 export interface HourWeather extends Weather {

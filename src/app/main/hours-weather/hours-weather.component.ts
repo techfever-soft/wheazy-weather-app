@@ -7,8 +7,13 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class HoursWeatherComponent implements OnInit {
   @Input('hours') hours!: any[];
+  public fakeHours: number[] = [];
 
-  constructor() {}
+  constructor() {
+    for (let i = 0; i < 12; i++) {
+      this.fakeHours.push(i);
+    }
+  }
 
   ngOnInit(): void {}
 }

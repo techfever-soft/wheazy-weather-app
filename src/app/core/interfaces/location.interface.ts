@@ -1,8 +1,3 @@
-export interface LocationPoint {
-  lat: number;
-  lng: number;
-}
-
 export interface AddressComponents {
   formattedAddress: google.maps.GeocoderResult[] | string;
   city: google.maps.GeocoderResult[] | string;
@@ -17,4 +12,9 @@ export interface SavedLocationPoint {
   createdAt: Date;
   simplifiedAddress: string;
   selected: boolean;
+}
+
+export interface LocationPoint {
+  lat: number;
+  lng: number;
 }

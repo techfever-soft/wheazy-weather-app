@@ -1,25 +1,111 @@
-<div class="wheazy__weather">
+<div class="wheazy__weather" *ngIf="!hours.length">
   <div mat-dialog-title class="text-center">
-    <mat-icon color="primary">today</mat-icon>
-    <h3 class="mat-h3">Prévisions de la journée</h3>
+    <ngx-skeleton-loader
+      animation="progress-dark"
+      appearance="circle"
+      [theme]="{
+        background: 'rgba(255,255,255, 0.25)',
+        width: '25px',
+        height: '25px'
+      }"
+    ></ngx-skeleton-loader>
+    <br />
+    <ngx-skeleton-loader
+      animation="progress-dark"
+      [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '75px' }"
+    ></ngx-skeleton-loader>
   </div>
 
   <div class="wheazy__weather__timeline">
     <div
-      class="wheazy__weather__timeline--item {{ weather.isNow ? 'active' : '' }}"
+      class="wheazy__weather__timeline--item"
+      *ngFor="let weather of fakeHours"
+    >
+      <ngx-skeleton-loader
+        animation="progress-dark"
+        [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '50px' }"
+      ></ngx-skeleton-loader>
+      <div style="display: flex; flex-direction: column; align-items: center" class="mt-10 mb-10">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '35px',
+            height: '35px'
+          }"
+        ></ngx-skeleton-loader>
+        <div>
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '35px' }"
+          ></ngx-skeleton-loader>
+          <br />
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '75px' }"
+          ></ngx-skeleton-loader>
+        </div>
+        <div class="hour-metadatas">
+          <div class="metadata">
+            <ngx-skeleton-loader
+              animation="progress-dark"
+              appearance="circle"
+              [theme]="{
+                background: 'rgba(255,255,255, 0.25)',
+                width: '20px',
+                height: '20px'
+              }"
+            ></ngx-skeleton-loader>
+            <br />
+            <ngx-skeleton-loader
+              animation="progress-dark"
+              [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '50px' }"
+            ></ngx-skeleton-loader>
+          </div>
+          <div class="metadata">
+            <ngx-skeleton-loader
+              animation="progress-dark"
+              appearance="circle"
+              [theme]="{
+                background: 'rgba(255,255,255, 0.25)',
+                width: '20px',
+                height: '20px'
+              }"
+            ></ngx-skeleton-loader>
+            <br />
+            <ngx-skeleton-loader
+              animation="progress-dark"
+              [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '50px' }"
+            ></ngx-skeleton-loader>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wheazy__weather" *ngIf="hours.length">
+  <div mat-dialog-title class="text-center">
+    <mat-icon color="primary">today</mat-icon>
+    <h3 class="mat-h3">Journée</h3>
+  </div>
+
+  <div class="wheazy__weather__timeline">
+    <div
+      class="wheazy__weather__timeline--item {{
+        weather.isNow ? 'active' : ''
+      }}"
       *ngFor="let weather of hours"
     >
-      <p class="mat-p">{{ weather.hour }} h 00</p>
+      <p class="mat-p">{{ weather.hour }}h00</p>
       <div class="mt-20 mb-10">
         <mat-icon fontSet="material-symbols-sharp" class="hour-state-icon">
           {{ weather.icon }}
         </mat-icon>
       </div>
       <div class="mb-20">
-        <p class="mat-p">
-          {{ weather.currentTemperature }}°C
-          <!-- {{ weather.minTemperature }}°C - {{ weather.maxTemperature }}°C -->
-        </p>
+        <p class="mat-p">{{ weather.currentTemperature }}°C</p>
         <p class="mat-caption text-muted">
           {{ weather.description }}
         </p>
