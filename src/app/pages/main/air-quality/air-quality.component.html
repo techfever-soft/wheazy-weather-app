@@ -1,0 +1,180 @@
+<div class="wheazy__weather">
+  <div mat-dialog-title class="text-center">
+    <mat-icon color="primary">masks</mat-icon>
+    <h3 class="mat-h3">Qualité de l'air</h3>
+  </div>
+
+  <!-- <pre>
+    {{ currentAirQuality | async | json }}
+  </pre> -->
+
+  <div class="wheazy__air-quality">
+    <fieldset class="group">
+      <legend>Particules fines</legend>
+      <div class="item">
+        <span
+          class="status {{
+            (currentAirQuality | async)?.particles?.pm10?.status
+          }}"
+        ></span>
+        <div class="item-content">
+          <p class="mat-p">PM10</p>
+          <p class="mat-caption text-muted">
+            {{ (currentAirQuality | async)?.particles?.pm10?.value }} μg/m³
+          </p>
+        </div>
+      </div>
+      <div class="item low">
+        <span
+          class="status {{
+            (currentAirQuality | async)?.particles?.pm2_5?.status
+          }}"
+        ></span>
+        <div class="item-content">
+          <p class="mat-p">PM2.5</p>
+          <p class="mat-caption text-muted">
+            {{ (currentAirQuality | async)?.particles?.pm2_5?.value }} μg/m³
+          </p>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset class="group">
+      <legend>Poussières</legend>
+      <div class="item">
+        <span
+          class="status {{ (currentAirQuality | async)?.dusts?.sand?.status }}"
+        ></span>
+        <div class="item-content">
+          <p class="mat-p">Sable</p>
+          <p class="mat-caption text-muted">
+            {{ (currentAirQuality | async)?.dusts?.sand?.value }} μg/m³
+          </p>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset class="group">
+      <legend>Gaz</legend>
+      <div class="item">
+        <span class="status low"></span>
+        <div class="item-content">
+          <p class="mat-p">Monoxyde de carbone (CO)</p>
+          <p class="mat-caption text-muted">
+            {{ (currentAirQuality | async)?.gases?.carbonMonoxide }} μg/m³
+          </p>
+        </div>
+      </div>
+      <!-- TODO : reform others -->
+      <div class="item">
+        <span class="status medium"></span>
+        <div class="item-content">
+          <p class="mat-p">Dioxyde d'azote (NO₂)</p>
+          <p class="mat-caption text-muted">12 μg/m³</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="status caution"></span>
+        <div class="item-content">
+          <p class="mat-p">Dioxyde de soufre (SO₂)</p>
+          <p class="mat-caption text-muted">12 μg/m³</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="status caution"></span>
+        <div class="item-content">
+          <p class="mat-p">Ozone (O₃)</p>
+          <p class="mat-caption text-muted">12 μg/m³</p>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset class="group">
+      <legend>Pollens</legend>
+      <div class="item">
+        <span class="status high"></span>
+        <div class="item-content">
+          <p class="mat-p">Monoxyde de carbone (CO)</p>
+          <p class="mat-caption text-muted">12 μg/m³</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="status high"></span>
+        <div class="item-content">
+          <p class="mat-p">Dioxyde d'azote (NO₂)</p>
+          <p class="mat-caption text-muted">12 μg/m³</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="status high"></span>
+        <div class="item-content">
+          <p class="mat-p">Dioxyde de soufre (SO₂)</p>
+          <p class="mat-caption text-muted">12 μg/m³</p>
+        </div>
+      </div>
+      <div class="item">
+        <span class="status high"></span>
+        <div class="item-content">
+          <p class="mat-p">Ozone (O₃)</p>
+          <p class="mat-caption text-muted">12 μg/m³</p>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <!-- <div class="wheazy__air-quality">
+    <div class="group">
+      <h4 class="mat-h4">Particules fines</h4>
+      <div class="item">
+        <p class="mat-caption">PM10</p>
+        <p class="mat-p"><b>12 μg/m³</b></p>
+      </div>
+    </div>
+    <div class="group">
+      <h4 class="mat-h4">Gaz</h4>
+      <div class="item">
+        <p class="mat-caption">Monoxyde de carbone (CO)</p>
+        <p class="mat-p"><b>12 μg/m³</b></p>
+      </div>
+      <div class="item">
+        <p class="mat-caption">Dioxyde d'azote (NO₂)</p>
+        <p class="mat-p"><b>12 μg/m³</b></p>
+      </div>
+      <div class="item">
+        <p class="mat-caption">Dioxyde de soufre (SO₂)</p>
+        <p class="mat-p"><b>12 μg/m³</b></p>
+      </div>
+      <div class="item">
+        <p class="mat-caption">Ozone (O₃)</p>
+        <p class="mat-p"><b>12 μg/m³</b></p>
+      </div>
+    </div>
+    <div class="group">
+        <h4 class="mat-h4">Poussières</h4>
+        <div class="item">
+          <p class="mat-caption">Sable</p>
+          <p class="mat-p"><b>12 μg/m³</b></p>
+        </div>
+        </div>
+        <div class="group">
+            <h4 class="mat-h4">Pollens</h4>
+            <div class="item">
+              <p class="mat-caption">Aulne</p>
+              <p class="mat-p"><b>12 μg/m³</b></p>
+            </div>
+            <div class="item">
+                <p class="mat-caption">Bouleau</p>
+                <p class="mat-p"><b>12 μg/m³</b></p>
+              </div>
+              <div class="item">
+                <p class="mat-caption">Gazon</p>
+                <p class="mat-p"><b>12 μg/m³</b></p>
+              </div>
+              <div class="item">
+                <p class="mat-caption">Armoise</p>
+                <p class="mat-p"><b>12 μg/m³</b></p>
+              </div>
+              <div class="item">
+                <p class="mat-caption">Olivier</p>
+                <p class="mat-p"><b>12 μg/m³</b></p>
+              </div>
+            </div>
+  </div> -->
+</div>

@@ -1,18 +1,21 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { SavedLocationPoint } from '../core/interfaces/location.interface';
+import { grow } from 'src/app/shared/animations/grow';
+import { SavedLocationPoint } from '../../core/interfaces/location.interface';
 import {
+  AirQuality,
   CurrentWeather,
   DayWeather,
   HourWeather,
-} from '../core/interfaces/weather.interface';
-import { LocationService } from '../core/services/location.service';
-import { WeatherService } from '../core/services/weather.service';
+} from '../../core/interfaces/weather.interface';
+import { LocationService } from '../../core/services/location.service';
+import { WeatherService } from '../../core/services/weather.service';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
+  animations: [grow],
 })
 export class MainComponent implements OnInit {
   public savedLocations: Observable<SavedLocationPoint[]>;
@@ -20,16 +23,27 @@ export class MainComponent implements OnInit {
   public currentWeather!: CurrentWeather;
   public actualHoursWeather: any[] = [];
   public actualDaysWeather: DayWeather[] = [];
+  
+  public currentAirQuality!: Observable<AirQuality>;
 
   public isCurrentWeatherLoading: boolean = true;
   // TODO: others loaders
   // public isLoading: boolean = true;
   // public isLoading: boolean = true;
 
+  public isAirQualityShowed: boolean = true;
+
+  public showDebug: Observable<boolean>;
+  public unit: Observable<string>;
+
   constructor(
     private locationService: LocationService,
     private weatherService: WeatherService
   ) {
+    this.showDebug = this.weatherService.getDebug();
+    this.unit = this.weatherService.getUnit();
+
+    /** ANCHOR: Saved locations */
     this.savedLocations = this.locationService.getSavedLocations();
 
     /** ANCHOR: Current weather */
@@ -39,6 +53,8 @@ export class MainComponent implements OnInit {
       .subscribe((location: SavedLocationPoint) => {
         if (location && location.selected) {
           this.weatherService.fetchWeatherAtLocation(location);
+      this.currentAirQuality = this.weatherService.getAirQuality();
+
         }
       });
 
@@ -47,8 +63,8 @@ export class MainComponent implements OnInit {
       this.isCurrentWeatherLoading = true;
       setTimeout(() => {
         this.currentWeather = currentWeather;
-          this.isCurrentWeatherLoading = false;
-        }, 2500);
+        this.isCurrentWeatherLoading = false;
+      }, 2500);
     });
 
     /** ANCHOR: Weather by hours */
@@ -72,10 +88,15 @@ export class MainComponent implements OnInit {
           }, 2500);
         }
       });
+
   }
 
   ngOnInit(): void {
     // this.openAddSavedLocationDialog();
+  }
+
+  public toggleAirQuality() {
+    this.isAirQualityShowed = !this.isAirQualityShowed;
   }
 
   public selectLocation(location: SavedLocationPoint): void {

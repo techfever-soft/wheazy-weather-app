@@ -1,31 +1,90 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="accent">
   <button mat-icon-button (click)="toggleDrawer()">
     <mat-icon>{{ drawerOpened ? "close" : "menu" }}</mat-icon>
   </button>
-  <h1 class="mat-h1">Wheazy</h1>
+  <button
+    mat-button
+    class="brand-link"
+    routerLink="/main"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="closeDrawer()"
+  >
+    <h1 class="mat-h1">Wheazy.</h1>
+  </button>
+
+  <button
+    mat-button
+    routerLink="/about"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="closeDrawer()"
+  >
+    <mat-icon>info</mat-icon> À propos
+  </button>
+  <button
+    mat-button
+    routerLink="/settings"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    (click)="closeDrawer()"
+  >
+    <mat-icon>settings</mat-icon> Paramètres
+  </button>
 </mat-toolbar>
 
 <mat-drawer-container autosize>
   <mat-drawer mode="side" [opened]="drawerOpened">
-    <div class="text-center mt-20 mb-20">
-      <h1 class="mat-h1"><b>Wheazy</b></h1>
-      <div class="mt-10">
-        <p class="mat-p">Météo à la demande</p>
-      </div>
+    <button
+      mat-button
+      class="brand-link"
+      routerLink="/main"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      (click)="closeDrawer()"
+    >
+      <h1 class="mat-h1">Wheazy.</h1>
+    </button>
+    <div class="description text-center mt-20 mb-20">
+      <p class="mat-p text-muted">
+        Votre application météorologique et de qualité de l'air, à la demande
+      </p>
     </div>
 
     <mat-divider></mat-divider>
 
     <div class="text-center mt-20 mb-10">
-      <mat-icon color="accent">share_location</mat-icon>
+      <mat-icon color="primary">share_location</mat-icon>
       <h4 class="mat-h4">Vos localisations</h4>
     </div>
 
-    <mat-nav-list cdkDropList class="wheazy__location-list">
+    <div class="mt-20 mb-20 text-center">
+      <p class="mat-p">
+        <b>{{ (savedLocations | async)?.length }} / 5 max.</b>
+      </p>
+    </div>
+
+    <div class="mt-20 mb-20 text-center">
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="openAddSavedLocationDialog()"
+      >
+        <mat-icon> add_location_alt </mat-icon> Ajouter une localisation
+      </button>
+    </div>
+
+    <div class="mb-20 text-center" *ngIf="isNotAtWeatherPage">
+      <button color="primary" mat-button routerLink="/main">
+        <mat-icon>dashboard</mat-icon> Retour au tableau de bord
+      </button>
+    </div>
+
+    <mat-nav-list cdkDropList class="wheazy__location-list mb-20">
       <a
         class="wheazy__location-list--item {{
           location.selected ? 'selected' : ''
-        }}"
+        }} {{ isNotAtWeatherPage ? 'disabled' : '' }}"
         mat-list-item
         *ngFor="let location of savedLocations | async; let index = index"
         (click)="selectLocation(location); closeDrawer()"
@@ -33,11 +92,13 @@
         (cdkDragDropped)="onLocationDropped($event)"
         [cdkDragDisabled]="(savedLocations | async)?.length === 1"
         cdkDragPreviewClass="wheazy__location-list"
+        [disabled]="isNotAtWeatherPage"
       >
         <button
           mat-icon-button
           cdkDragHandle
           [disabled]="(savedLocations | async)?.length === 1"
+          matTooltip="Ordonner"
         >
           <mat-icon>drag_indicator</mat-icon>
         </button>
@@ -48,6 +109,7 @@
           class="text-end"
           mat-icon-button
           color="warn"
+          matTooltip="Supprimer"
           (click)="
             $event.preventDefault();
             $event.stopPropagation();
@@ -58,68 +120,11 @@
         </button>
       </a>
     </mat-nav-list>
-    <div class="mt-20 mb-20 text-center">
-      <button
-        mat-fab
-        color="primary"
-        matTooltip="Ajouter une localisation"
-        (click)="openAddSavedLocationDialog()"
-      >
-        <mat-icon> add_location_alt </mat-icon>
-      </button>
-    </div>
 
     <mat-divider></mat-divider>
 
-    <div class="text-center mt-20 mb-10">
-      <mat-icon color="accent">info</mat-icon>
-      <h4 class="mat-h4">À propos</h4>
-    </div>
-
-    <div class="wheazy__about">
-      <a
-        matRipple
-        matTooltip="Visiter le site web"
-        href="https://techfever.dev"
-        target="_blank"
-      >
-        <img
-          src="/assets/techfever-logo-black.svg"
-          alt="Logo Techfever"
-          class="logo mat-elevation-z3"
-        />
-        <h4 class="mat-h4"><b>Techfever</b></h4>
-        <p class="mat-caption text-muted">
-          Productions digitales indépendentes
-        </p>
-      </a>
-    </div>
-
-    <div class="mt-10 text-center">
-      <a
-        mat-button
-        color="accent"
-        href="https://techfever.dev/works"
-        target="_blank"
-      >
-        <mat-icon>open_in_new</mat-icon>
-        Voir les autres créations
-      </a>
-      <br />
-      <br />
-      <a
-        mat-raised-button
-        color="primary"
-        href="https://www.patreon.com/techfever"
-        target="_blank"
-      >
-        <img src="/assets/patreon.svg" alt="Logo Patreon" />
-        Donner sur Patreon
-      </a>
-    </div>
-
     <div class="mt-20 mb-10 text-center">
-      <p class="mat-caption text-muted">v{{ version }}</p>
+      <p class="mat-p text-muted">v{{ version }}</p>
     </div>
     <div class="wheazy__copyright text-center">
       <p class="mat-p">
@@ -143,7 +148,7 @@
           <router-outlet></router-outlet>
 
           <div class="mt-20 mb-10 text-center">
-            <p class="mat-caption text-muted">v{{ version }}</p>
+            <p class="mat-p text-muted">v{{ version }}</p>
           </div>
           <div class="wheazy__copyright mb-20 text-center">
             <p class="mat-p">

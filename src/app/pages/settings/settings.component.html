@@ -1,0 +1,57 @@
+<div class="mb-20 mt-20 text-center">
+  <button color="primary" mat-button routerLink="/main">
+    <mat-icon>dashboard</mat-icon> Retour au tableau de bord
+  </button>
+</div>
+
+<div class="wheazy__weather">
+  <div class="text-center" mat-dialog-title>
+    <mat-icon color="accent">settings</mat-icon>
+    <h3 class="mat-h3">
+      <b>Paramètres</b>
+    </h3>
+  </div>
+
+  <div class="wheazy__form-layout mt-10">
+    <form>
+      <fieldset class="mb-20">
+        <legend class="text-icon">
+          <mat-icon>thermostat</mat-icon> Unité de mesure
+        </legend>
+        <div style="display: inline-flex">
+          Fahrenheit (°F)
+          <div style="margin: 0 10px">
+            <mat-slide-toggle [checked]="true" (toggleChange)="changeUnit($event)"></mat-slide-toggle>
+          </div>
+          Celcius (°C)
+        </div>
+      </fieldset>
+
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Votre langue</mat-label>
+          <mat-select value="fr" disabled>
+            <mat-option value="fr">Français</mat-option>
+            <mat-option value="en">English</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre de localisations maximal</mat-label>
+          <mat-select value="5">
+            <mat-option value="5">5 localisations max.</mat-option>
+            <mat-option value="10">10 localisations max.</mat-option>
+            <mat-option value="15">15 localisations max.</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-slide-toggle [checked]="debug" (toggleChange)="toggleDebug($event)"
+          >Afficher la barre de debug</mat-slide-toggle
+        >
+      </div>
+    </form>
+  </div>
+</div>

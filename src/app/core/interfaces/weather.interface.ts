@@ -43,3 +43,39 @@ export interface CurrentWeather extends Weather {
   place: SavedLocationPoint;
   currentTemperature: number;
 }
+
+export interface AirQuality {
+  uvIndex: number;
+  globalQuality?: string;
+  dusts: {
+    sand: {
+      status: string;
+      value: number;
+    };
+  };
+  particles: {
+    pm2_5: {
+      status: string;
+      value: number;
+    };
+    pm10: {
+      status: string;
+      value: number;
+    }
+  };
+  // TODO: reform others
+  gases: {
+    carbonMonoxide: number;
+    nitrogenDioxide: number;
+    sulphurDioxide: number;
+    ozone: number;
+  };
+  pollens: {
+    alder: number;
+    birch: number;
+    grass: number;
+    mugwort: number;
+    olive: number;
+    ragweed: number;
+  };
+}

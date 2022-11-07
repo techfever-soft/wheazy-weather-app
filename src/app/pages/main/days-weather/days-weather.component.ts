@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Observable } from 'rxjs';
 import { DayWeather } from 'src/app/core/interfaces/weather.interface';
 
 @Component({
@@ -8,6 +9,7 @@ import { DayWeather } from 'src/app/core/interfaces/weather.interface';
 })
 export class DaysWeatherComponent implements OnInit {
   @Input('days') days!: DayWeather[];
+  @Input('unit') unit!: Observable<string>;
   public fakeDays: number[] = [];
 
   constructor() {

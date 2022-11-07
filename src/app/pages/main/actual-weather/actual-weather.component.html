@@ -1,7 +1,4 @@
-<div
-  class="wheazy__actual-weather"
-  *ngIf="isLoading"
->
+<div class="wheazy__actual-weather" *ngIf="isLoading">
   <div class="wheazy__actual-weather__wrapper">
     <div class="wheazy__actual-weather__wrapper--main">
       <div class="actual-state-location">
@@ -161,59 +158,96 @@
   </div>
 </div>
 
-<div
-  class="wheazy__actual-weather"
-  *ngIf="!isLoading"
->
+<div class="wheazy__actual-weather" *ngIf="!isLoading">
   <div class="wheazy__actual-weather__wrapper">
     <div class="wheazy__actual-weather__wrapper--main">
-      <div class="actual-state-location">
-        <mat-icon>location_on</mat-icon>
-        <p class="mat-p text-muted">
-          {{ currentWeather?.place?.simplifiedAddress }}
-        </p>
+      <div class="wheazy__actual-weather__wrapper--main__state">
+        <div class="actual-state-location">
+          <mat-icon>location_on</mat-icon>
+          <p class="mat-p text-muted">
+            {{ currentWeather.place.simplifiedAddress }}
+          </p>
+        </div>
+        <div class="actual-state-hour mt-10">
+          <mat-icon>access_time</mat-icon>
+          <h4 class="mat-h4 text-muted">
+            {{ currentTime }}
+          </h4>
+        </div>
+        <div class="actual-state">
+          <mat-icon fontSet="material-symbols-sharp">
+            {{ currentWeather.icon }}
+          </mat-icon>
+          <h1 class="mat-h1">
+            {{ currentWeather.currentTemperature }}
+            {{ (unit | async) === "celcius" ? "°C" : "°F" }}
+          </h1>
+        </div>
+        <div class="actual-state-description text-muted">
+          <p class="mat-p">{{ currentWeather.description }}</p>
+        </div>
       </div>
-      <div class="actual-state-hour mt-10">
-        <mat-icon>access_time</mat-icon>
-        <h4 class="mat-h4 text-muted">
-          {{ currentTime }}
-        </h4>
-      </div>
-      <div class="actual-state">
-        <mat-icon fontSet="material-symbols-sharp">
-          {{ currentWeather?.icon }}
-        </mat-icon>
-        <h1 class="mat-h1">{{ currentWeather?.currentTemperature }}°C</h1>
-      </div>
-      <div class="actual-state-description text-muted">
-        <p class="mat-p">{{ currentWeather?.description }}</p>
+      <div class="wheazy__actual-weather__wrapper--main__quality mt-20">
+        <div class="item">
+          <p class="mat-p"><b>Indice UV</b></p>
+          <mat-chip-list>
+            <mat-chip
+              disableRipple
+              class="uv-index {{
+                uvIndex === 0 || uvIndex === 1 || uvIndex === 2
+                  ? 'low'
+                  : uvIndex === 3 || uvIndex === 4 || uvIndex === 5
+                  ? 'medium'
+                  : uvIndex === 6 || uvIndex === 7
+                  ? 'high'
+                  : 'very_high'
+              }}"
+              >{{ uvIndex }}</mat-chip
+            >
+          </mat-chip-list>
+        </div>
+        <div class="item">
+          <p class="mat-p"><b>Qualité d'air globale</b></p>
+          <mat-chip-list>
+            <mat-chip disableRipple class="air-quality {{ globalAirQuality }}">{{
+              globalAirQuality === "excellent" ? "Excellente" : ""
+            }}</mat-chip>
+          </mat-chip-list>
+        </div>
       </div>
     </div>
+
     <div class="wheazy__actual-weather__wrapper--metadatas">
       <div class="item">
         <mat-icon>air</mat-icon>
         <p class="mat-p text-muted item-title">Vitesse du vent</p>
-        <p class="mat-p item-value">{{ currentWeather?.windSpeed }} km/h</p>
+        <p class="mat-p item-value">{{ currentWeather.windSpeed }} km/h</p>
       </div>
       <div class="item">
         <mat-icon>water_drop</mat-icon>
         <p class="mat-p text-muted item-title">Précipitations</p>
-        <p class="mat-p item-value">{{ currentWeather?.precipitation }} mm</p>
+        <p class="mat-p item-value">{{ currentWeather.precipitation }} mm</p>
       </div>
       <div class="item">
         <mat-icon>snowing</mat-icon>
         <p class="mat-p text-muted item-title">Humidité</p>
-        <p class="mat-p item-value">{{ currentWeather?.humidity }} %</p>
+        <p class="mat-p item-value">{{ currentWeather.humidity }} %</p>
       </div>
       <div class="item">
         <mat-icon>arrow_circle_up</mat-icon>
         <p class="mat-p text-muted item-title">Température maximale</p>
-        <p class="mat-p item-value">{{ currentWeather?.maxTemperature }} °C</p>
+        <p class="mat-p item-value">
+          {{ currentWeather.maxTemperature }}
+          {{ (unit | async) === "celcius" ? "°C" : "°F" }}
+        </p>
       </div>
       <div class="item">
         <mat-icon>arrow_circle_down</mat-icon>
         <p class="mat-p text-muted item-title">Température minimale</p>
-        <p class="mat-p item-value">{{ currentWeather?.minTemperature }} °C</p>
+        <p class="mat-p item-value">
+          {{ currentWeather.minTemperature }}
+          {{ (unit | async) === "celcius" ? "°C" : "°F" }}
+        </p>
       </div>
     </div>
   </div>

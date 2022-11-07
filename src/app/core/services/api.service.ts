@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import moment from 'moment';
 import { SavedLocationPoint } from '../interfaces/location.interface';
+import { AirQuality } from '../interfaces/weather.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private baseUrl = 'https://api.open-meteo.com/v1/forecast?';
+  private baseWeatherUrl = 'https://api.open-meteo.com/v1/forecast?';
+  private baseAirUrl = 'https://air-quality-api.open-meteo.com/v1/air-quality?';
 
   constructor() {}
 
@@ -15,7 +17,7 @@ export class ApiService {
     const lng = location.position.lng;
 
     const request = await fetch(
-      this.baseUrl +
+      this.baseWeatherUrl +
         'latitude=' +
         lat +
         '&longitude=' +
@@ -31,7 +33,7 @@ export class ApiService {
       minTemperature: result.daily.temperature_2m_min as any[],
       maxTemperature: result.daily.temperature_2m_max as any[],
       windSpeed: result.daily.windspeed_10m_max as any[],
-      date: result.daily.time as any[]
+      date: result.daily.time as any[],
     };
 
     return rawWeekData;
@@ -42,7 +44,7 @@ export class ApiService {
     const lng = location.position.lng;
 
     const request = await fetch(
-      this.baseUrl +
+      this.baseWeatherUrl +
         'latitude=' +
         lat +
         '&longitude=' +
@@ -53,7 +55,7 @@ export class ApiService {
         '&timezone=auto'
     );
     const result = await request.json();
-    // return result;
+
     const rawCurrentDayData = {
       temperature: result.current_weather.temperature,
       weathercode: result.current_weather.weathercode,
@@ -82,7 +84,7 @@ export class ApiService {
     const lng = location.position.lng;
 
     const request = await fetch(
-      this.baseUrl +
+      this.baseWeatherUrl +
         'latitude=' +
         lat +
         '&longitude=' +
@@ -91,7 +93,6 @@ export class ApiService {
         '&timezone=auto'
     );
     const result = await request.json();
-
 
     const rawHourlyWeather: any = {
       precipitation: result.hourly.precipitation as any[],
@@ -115,5 +116,75 @@ export class ApiService {
     };
 
     return hourlyWeather;
+  }
+
+  public async fetchAirQuality(location: SavedLocationPoint) {
+    const lat = location.position.lat;
+    const lng = location.position.lng;
+
+    const request = await fetch(
+      this.baseAirUrl +
+        'latitude=' +
+        lat +
+        '&longitude=' +
+        lng +
+        '&hourly=pm10,pm2_5,carbon_monoxide,nitrogen_dioxide,sulphur_dioxide,ozone,dust,uv_index,uv_index_clear_sky,alder_pollen,birch_pollen,grass_pollen,mugwort_pollen,olive_pollen,ragweed_pollen' +
+        '&timezone=auto'
+    );
+    const result = await request.json();
+
+    console.log(result);
+
+    const rawAirQuality = {
+      uvIndex: result.hourly.uv_index as any[],
+      dusts: {
+        sand: result.hourly.dust as any[],
+      },
+      gases: {
+        carbonMonoxide: result.hourly.carbon_monoxide as any[],
+        nitrogenDioxide: result.hourly.nitrogen_dioxide as any[],
+        sulphurDioxide: result.hourly.sulphur_dioxide as any[],
+        ozone: result.hourly.ozone as any[],
+      },
+      pollens: {
+        alder: result.hourly.alder_pollen as any[],
+        birch: result.hourly.birch_pollen as any[],
+        grass: result.hourly.grass_pollen as any[],
+        mugwort: result.hourly.mugwort_pollen as any[],
+        olive: result.hourly.olive_pollen as any[],
+        ragweed: result.hourly.ragweed_pollen as any[],
+      },
+      particles: {
+        pm2_5: result.hourly.pm2_5 as any[],
+        pm10: result.hourly.pm10 as any[],
+      },
+    };
+
+    const airQuality = {
+      uvIndex: rawAirQuality.uvIndex[0],
+      dusts: {
+          sand: rawAirQuality.dusts.sand[0],
+      },
+      gases: {
+        carbonMonoxide: rawAirQuality.gases.carbonMonoxide[0],
+        nitrogenDioxide: rawAirQuality.gases.nitrogenDioxide[0],
+        sulphurDioxide: rawAirQuality.gases.sulphurDioxide[0],
+        ozone: rawAirQuality.gases.ozone[0],
+      },
+      pollens: {
+        alder: rawAirQuality.pollens.alder[0],
+        birch: rawAirQuality.pollens.birch[0],
+        grass: rawAirQuality.pollens.grass[0],
+        mugwort: rawAirQuality.pollens.mugwort[0],
+        olive: rawAirQuality.pollens.olive[0],
+        ragweed: rawAirQuality.pollens.ragweed[0],
+      },
+      particles: {
+        pm2_5: rawAirQuality.particles.pm2_5[0],
+        pm10: rawAirQuality.particles.pm10[0],
+      },
+    };
+
+    return airQuality;
   }
 }

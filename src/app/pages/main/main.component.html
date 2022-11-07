@@ -7,7 +7,7 @@
     </div>
     <button
       mat-raised-button
-      color="primary"
+      color="accent"
       (click)="openAddSavedLocationDialog()"
     >
       <mat-icon>add_location_alt</mat-icon> Ajouter une nouvelle localisation
@@ -16,14 +16,21 @@
 </div>
 
 <div *ngIf="(savedLocations | async)?.length">
-  <div class="mt-20 mb-20">
+  <div class="mt-20 mb-20" *ngIf="showDebug | async">
     <app-debug-panel></app-debug-panel>
   </div>
 
   <app-actual-weather
     [currentWeather]="currentWeather"
     [isLoading]="isCurrentWeatherLoading"
+    [unit]="unit"
+    [uvIndex]="(currentAirQuality | async)?.uvIndex"
+    [globalAirQuality]="(currentAirQuality | async)?.globalQuality"
   ></app-actual-weather>
+
+  <!-- <pre>
+  {{ currentAirQuality | async | json }}
+  </pre> -->
 
   <div class="mt-20 text-center">
     <button
@@ -32,7 +39,7 @@
       [matMenuTriggerFor]="changeLocationMenu"
       [disabled]="!currentWeather"
     >
-      <mat-icon>edit_location_alt</mat-icon> Changer la localisation
+      <mat-icon>edit_location_alt</mat-icon> Changer de localisation
     </button>
     <mat-menu #changeLocationMenu="matMenu">
       <button mat-menu-item (click)="openAddSavedLocationDialog()">
@@ -60,13 +67,33 @@
         </div>
       </mat-menu>
     </mat-menu>
+
+    <button
+      mat-button
+      [color]="isAirQualityShowed ? 'warn' : 'primary'"
+      (click)="toggleAirQuality()"
+      disabled
+    >
+      <mat-icon>{{ isAirQualityShowed ? "close" : "masks" }}</mat-icon>
+      {{ isAirQualityShowed ? "Masquer" : "Afficher" }} la qualité de l'air
+    </button>
+  </div>
+
+  <div class="mt-20" [@grow]="isAirQualityShowed ? 'open' : 'close'">
+    <app-air-quality [currentAirQuality]="currentAirQuality"></app-air-quality>
   </div>
 
   <div class="mt-20">
-    <app-hours-weather [hours]="actualHoursWeather"></app-hours-weather>
+    <app-hours-weather
+      [hours]="actualHoursWeather"
+      [unit]="unit"
+    ></app-hours-weather>
   </div>
 
   <div class="mt-20">
-    <app-days-weather [days]="actualDaysWeather"></app-days-weather>
+    <app-days-weather
+      [days]="actualDaysWeather"
+      [unit]="unit"
+    ></app-days-weather>
   </div>
 </div>

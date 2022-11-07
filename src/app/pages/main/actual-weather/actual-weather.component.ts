@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import moment from 'moment';
-import { CurrentWeather } from 'src/app/core/interfaces/weather.interface';
+import { Observable } from 'rxjs';
+import {
+  AirQuality,
+  CurrentWeather,
+} from 'src/app/core/interfaces/weather.interface';
 
 @Component({
   selector: 'app-actual-weather',
@@ -10,16 +14,21 @@ import { CurrentWeather } from 'src/app/core/interfaces/weather.interface';
 export class ActualWeatherComponent implements OnInit {
   @Input('currentWeather') currentWeather!: CurrentWeather;
   @Input('isLoading') isLoading: boolean = true;
+  @Input('unit') unit!: Observable<string>;
+  @Input('uvIndex') uvIndex?: number;
+  @Input('globalAirQuality') globalAirQuality?: string;
 
   public currentTime: string = moment()
     .locale('fr')
-    .format('ddd Do MMM [à] HH[h]mm');
+    .format('dddd Do MMMM [, à] HH[h]mm');
 
   constructor() {}
 
   ngOnInit(): void {
     setInterval(() => {
-      this.currentTime = moment().locale('fr').format('ddd Do MMM [à] HH[h]mm');
+      this.currentTime = moment()
+        .locale('fr')
+        .format('dddd Do MMMM[, à] HH[h]mm');
     }, 1000);
   }
 

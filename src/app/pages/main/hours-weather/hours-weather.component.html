@@ -105,7 +105,7 @@
         </mat-icon>
       </div>
       <div class="mb-20">
-        <p class="mat-p">{{ weather.currentTemperature }}°C</p>
+        <p class="mat-p">{{ weather.currentTemperature }} {{ (unit | async) === "celcius" ? "°C" : "°F" }}</p>
         <p class="mat-caption text-muted">
           {{ weather.description }}
         </p>

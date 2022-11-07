@@ -1,6 +1,7 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ViewChild } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import build from 'src/build';
 import { SavedLocationPoint } from './core/interfaces/location.interface';
@@ -22,11 +23,12 @@ export class AppComponent {
 
   public version: string = build.version;
 
-  public drawerOpened = false;
+  public drawerOpened = true;
 
   constructor(
     private locationService: LocationService,
-    private weatherService: WeatherService
+    private weatherService: WeatherService,
+    private router: Router
   ) {
     this.savedLocations = this.locationService.getSavedLocations();
 
@@ -36,6 +38,10 @@ export class AppComponent {
     this.currentDayTime = this.weatherService.getCurrentDayTime();
     this.currentDayTimeAsNumber =
       this.weatherService.getCurrentDayTimeAsNumber();
+  }
+
+  public get isNotAtWeatherPage(): boolean {
+    return this.router.url === '/main' ? false : true;
   }
 
   public toggleDrawer() {

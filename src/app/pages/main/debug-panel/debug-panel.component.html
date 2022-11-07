@@ -1,10 +1,16 @@
-<mat-expansion-panel style="width: fit-content; margin: 0 auto" class="mt-20 mb-20">
+<mat-expansion-panel
+  style="width: fit-content; margin: 0 auto"
+  class="mt-20 mb-20"
+>
   <mat-expansion-panel-header
-    >(debug) Temps & saison</mat-expansion-panel-header
+    ><mat-icon>bug_report</mat-icon>&nbsp;Changer de temps ou de
+    saison</mat-expansion-panel-header
   >
 
   <fieldset>
-    <legend>Temps actuel (24H)</legend>
+    <legend class="text-icon">
+      <mat-icon>access_time</mat-icon> Temps actuel (24 heures)
+    </legend>
 
     <mat-form-field appearance="outline" style="width: 100%">
       <mat-label>Position du soleil</mat-label>
@@ -16,7 +22,7 @@
       <input
         type="text"
         matInput
-        [value]="(dayTimeAsNumber | async) + 'h'"
+        [value]="dayTimeInput"
         disabled
       />
     </mat-form-field>
@@ -39,7 +45,9 @@
   </fieldset>
 
   <fieldset>
-    <legend>Saisons (12 saisons)</legend>
+    <legend class="text-icon">
+      <mat-icon>calendar_month</mat-icon> Saisons (12 mois)
+    </legend>
 
     <mat-form-field appearance="outline" style="width: 100%">
       <mat-label>Saison définie</mat-label>
@@ -48,18 +56,14 @@
 
     <mat-form-field appearance="outline" style="width: 100%">
       <mat-label>Mois défini</mat-label>
-      <input
-        type="text"
-        matInput
-        [value]="seasonAsNumber | async | amLocale: 'fr' | amDateFormat: 'MMMM'"
-        disabled
-      />
+      <input type="text" matInput [value]="seasonInput" disabled />
     </mat-form-field>
 
     <mat-slider
       tickInterval="1"
       max="12"
       min="1"
+      [thumbLabel]="true"
       style="width: 100%"
       (valueChange)="seasonChanged($event)"
       [value]="seasonAsNumber | async"

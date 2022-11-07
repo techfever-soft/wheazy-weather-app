@@ -196,47 +196,91 @@
       }
 
       .wheazy__actual-weather__wrapper--main {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-self: center;
         @media screen and (max-width: 768px) {
           margin-bottom: 25px;
         }
-        .actual-state-location {
+        .wheazy__actual-weather__wrapper--main__quality {
           display: flex;
-          flex-direction: row;
+          flex-direction: column;
           align-items: center;
-          mat-icon {
-            margin-right: 5px;
+          .item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 5px;
+            mat-chip-list {
+              margin-top: 10px;
+              mat-chip {
+                color: #333;
+                font-weight: 600;
+                &.uv-index {
+                  &.low {
+                    background: #4caf50;
+                  }
+                  &.medium {
+                    background: #ff9800;
+                  }
+                  &.high {
+                    background: #f44336;
+                  }
+                }
+                &.air-quality {
+                  &.excellent {
+                    background: #4caf50
+                  }
+                  &.moderate {
+                    background: #ff9800;
+                  }
+                  &.dangerous {
+                    background: #f44336;
+                  }
+                }
+              }
+            }
           }
         }
-        .actual-state-hour {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          mat-icon {
-            font-size: 18px;
-            height: 18px;
-            width: 18px;
-            margin-right: 5px;
+        .wheazy__actual-weather__wrapper--main__state {
+          .actual-state-location {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            mat-icon {
+              margin-right: 5px;
+            }
           }
-        }
-        .actual-state {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          white-space: nowrap;
-          margin: 15px 0;
-          mat-icon {
-            font-size: 75px;
-            width: 75px;
-            height: 75px;
-            margin-right: 10px;
+          .actual-state-hour {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            mat-icon {
+              font-size: 18px;
+              height: 18px;
+              width: 18px;
+              margin-right: 5px;
+            }
           }
-          h1.mat-h1 {
-            font-size: 40px;
-            font-weight: bold;
-            letter-spacing: 3px;
+          .actual-state {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            white-space: nowrap;
+            margin: 15px 0;
+            mat-icon {
+              font-size: 75px;
+              width: 75px;
+              height: 75px;
+              margin-right: 15px;
+            }
+            h1.mat-h1 {
+              font-size: 40px;
+              font-weight: bold;
+              letter-spacing: 3px;
+            }
           }
-        }
-        .actual-state-description {
         }
       }
 
@@ -350,6 +394,47 @@
   }
 }
 
+.wheazy__air-quality {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  .group {
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    height: fit-content;
+    .item {
+      margin: 5px 0;
+      align-items: center;
+      display: flex;
+      .item-content {
+        .mat-p {
+          font-weight: bold;
+        }
+      }
+      .status {
+        height: 12px;
+        width: 12.5px;
+        border-radius: 50%;
+        margin-right: 10px;
+        &.low {
+          background: #4caf50;
+        }
+        &.medium {
+          background: #ffeb3b;
+        }
+        &.caution {
+          background: #ff9800
+        }
+        &.high {
+          background: #f44336;
+        }
+      }
+    }
+  }
+}
+
 .wheazy__copyright {
   padding: 15px;
   a {
@@ -366,6 +451,9 @@
   background: #424242;
   .wheazy__location-list--item {
     background: #424242;
+    &.disabled {
+      opacity: 0.5;
+    }
     &.selected {
       background: rgba(#ffc107, 0.35);
     }

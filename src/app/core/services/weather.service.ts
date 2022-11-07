@@ -7,6 +7,7 @@ import {
   SavedLocationPoint,
 } from '../interfaces/location.interface';
 import {
+  AirQuality,
   CurrentWeather,
   DayWeather,
   HourWeather,
@@ -35,6 +36,12 @@ export class WeatherService {
   private currentHourlyWeather$: Subject<HourWeather[]> = new Subject();
   private currentDaysWeather$: Subject<DayWeather[]> = new Subject();
 
+  private currentAirQuality$: Subject<AirQuality> = new Subject();
+
+  // ANCHOR: Settings
+  private unit$: BehaviorSubject<string> = new BehaviorSubject('celcius');
+  private showDebug$ = new BehaviorSubject(false);
+
   constructor(
     private locationService: LocationService,
     private apiService: ApiService
@@ -50,44 +57,120 @@ export class WeatherService {
       });
   }
 
+  public set unit(unit: string) {
+    this.unit$.next(unit);
+  }
+
+  public set debug(debug: boolean) {
+    this.showDebug$.next(debug);
+  }
+
+  public getDebug() {
+    return this.showDebug$.asObservable();
+  }
+
+  public getUnit() {
+    return this.unit$.asObservable();
+  }
+
+  public getAirQuality(): Observable<AirQuality> {
+    return this.currentAirQuality$.asObservable();
+  }
+
+  // public set showDebug(debug: boolean) {
+  //   this.showDebug$.next(debug);
+  // }
+
   public fetchWeatherAtLocation(location: SavedLocationPoint): void {
     // ANCHOR : get current weather
     this.apiService
       .fetchCurrentWeather(location)
       .then((rawCurrentWeather: any) => {
-        const finalCurrentWeather = this.transformCurrentWeather(
-          location,
-          rawCurrentWeather
-        );
+        const finalCurrentWeather: CurrentWeather =
+          this.transformCurrentWeather(location, rawCurrentWeather);
 
         this.currentWeather$.next(finalCurrentWeather);
       });
 
     // ANCHOR : get current hour weathers
     this.apiService.fetchHoursWeather(location).then((rawHoursWeather: any) => {
-      const finalHourlyWeather = this.transformHourlyWeather(
-        location,
-        rawHoursWeather
-      );
+      const finalHourlyWeather: HourWeather[] =
+        this.transformHourlyWeather(rawHoursWeather);
 
       this.currentHourlyWeather$.next(finalHourlyWeather);
     });
 
     // ANCHOR : get current week weather
     this.apiService.fetchWeekWeather(location).then((rawWeekWeather: any) => {
-      const finalWeekWeather = this.transformWeekWeather(
-        location,
-        rawWeekWeather
-      );
+      const finalWeekWeather: DayWeather[] =
+        this.transformWeekWeather(rawWeekWeather);
 
       this.currentDaysWeather$.next(finalWeekWeather);
     });
+
+    // ANCHOR: get actual air quality
+    this.apiService.fetchAirQuality(location).then((res: any) => {
+      console.log(res);
+      const finalAirQuality: AirQuality = this.transformAirQuality(res);
+
+      this.currentAirQuality$.next(finalAirQuality);
+    });
   }
 
-  private transformWeekWeather(
-    location: SavedLocationPoint,
-    rawWeekWeather: any
-  ): DayWeather[] {
+  private transformAirQuality(rawAirQuality: any): AirQuality {
+    let score = 100;
+    let quality = 'excellent';
+
+    // if (rawAirQuality.particles.pm2_5 && rawAirQuality.particles.pm10) {
+    //   score = score - 10;
+    // }
+    // if (rawAirQuality.gases.carbonMonoxide) {
+    //   if (rawAirQuality.gases.carbonMonoxide >= 200) {
+    //     score = score - 20;
+    //   }
+    //   if (rawAirQuality.gases.carbonMonoxide >= 300) {
+    //     score = score - 35;
+    //   }
+    // }
+    // if (rawAirQuality.gases.nitrogenDioxide) {
+    // }
+
+    // TODO: calculate score and switch it
+
+    // switch(score) {}
+
+    const airQuality: AirQuality = {
+      globalQuality: quality,
+      uvIndex: rawAirQuality.uvIndex,
+      dusts: {
+        sand: {
+          status: rawAirQuality.dusts.sand > 10 ? 'high' : 'low',
+          value: rawAirQuality.dusts.sand,
+        },
+      },
+      particles: {
+        pm10: {
+          status: rawAirQuality.particles.pm10 > 10 ? 'medium' : 'low',
+          value: rawAirQuality.particles.pm10
+        },
+        pm2_5: {
+          status: rawAirQuality.particles.pm2_5 > 10 ? 'medium' : 'low',
+          value: rawAirQuality.particles.pm2_5
+        }
+      },
+      // TODO: reform others
+      pollens: {
+        ...rawAirQuality.pollens,
+      },
+      gases: {
+        ...rawAirQuality.gases,
+      },
+    };
+
+    return airQuality;
+  }
+
+  private transformWeekWeather(rawWeekWeather: any): DayWeather[] {
     let newWeekWeather: DayWeather[] = [];
 
     for (let i = 0; i < 7; i++) {
@@ -101,7 +184,7 @@ export class WeatherService {
         windSpeed: rawWeekWeather.windSpeed[i],
         icon: this.translateWeatherIcon(
           rawWeekWeather.weatherCode[i],
-          moment().add(i, 'hours')
+          moment().add(i, 'days')
         ),
         description: this.translateWeatherDescription(
           rawWeekWeather.weatherCode[i]
@@ -114,10 +197,7 @@ export class WeatherService {
     return newWeekWeather;
   }
 
-  private transformHourlyWeather(
-    location: SavedLocationPoint,
-    rawHoursWeather: any
-  ): HourWeather[] {
+  private transformHourlyWeather(rawHoursWeather: any): HourWeather[] {
     let newHourWeather: HourWeather[] = [];
 
     for (let i = 0; i < 12; i++) {
@@ -171,7 +251,7 @@ export class WeatherService {
       ? timestamp.hours()
       : this.currentDayTimeAsNumber$.getValue();
 
-    if (dayTime < 6 || dayTime > 21) {
+    if (dayTime < 6 || dayTime > 20) {
       if (code === 0) {
         icon = 'nightlight';
       }

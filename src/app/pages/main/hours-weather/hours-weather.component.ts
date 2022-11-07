@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-hours-weather',
@@ -7,6 +8,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class HoursWeatherComponent implements OnInit {
   @Input('hours') hours!: any[];
+  @Input('unit') unit!: Observable<string>;
   public fakeHours: number[] = [];
 
   constructor() {

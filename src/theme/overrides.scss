@@ -4,10 +4,70 @@
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
 }
 
+mat-toolbar {
+  align-items: center;
+  .brand-link {
+    padding: 10px 20px;
+    display: flex;
+    border-radius: 10px;
+    margin: 10px 0;
+    &.active {
+     h1 {
+      font-weight: 900;
+     }
+    }
+    h1 {
+      font-size: 25px;
+      text-transform: uppercase;
+      margin: 0;
+      font-weight: 500;
+    }
+    @media screen and (max-width: 479px) {
+      display: none;
+    }
+  }
+  button {
+    transition: all 0.25s ease-in-out;
+    &.active {
+      background: #ffc107;
+    }
+    &:not(.brand-link, .mat-icon-button) {
+      margin: 0 10px;
+    }
+  }
+}
+
 mat-drawer-container {
   height: 100%;
   mat-drawer-content {
     background: #333;
+  }
+  .brand-link {
+    padding: 10px 20px;
+    display: flex;
+    border-radius: 10px;
+    margin: 10px auto;
+    text-align: center;
+    transition: all .25s ease-in-out;
+    &.active {
+      background: #ffc107;
+      color: #333;
+      h1 {
+      font-weight: 900;
+     }
+    }
+    h1 {
+      font-size: 25px;
+      text-transform: uppercase;
+      margin: 0;
+      font-weight: 500;
+    }
+    @media screen and (min-width: 479px) {
+      display: none;
+    }
+  }
+  .description {
+    padding: 0 15px;
   }
 }
 
@@ -30,7 +90,7 @@ mat-dialog-container {
 
 .mat-dialog-title {
   h3 {
-  font-weight: bold!important;
+    font-weight: bold !important;
   }
   mat-icon {
     font-size: 30px;
@@ -42,7 +102,7 @@ mat-dialog-container {
 .mat-button,
 .mat-raised-button {
   border-radius: 15px !important;
-  font-weight: 600!important;
+  font-weight: 600 !important;
   img {
     width: 20px;
     height: 20px;
@@ -52,6 +112,7 @@ mat-dialog-container {
 
 fieldset {
   border-radius: 15px;
+  border-style: solid;
   legend {
     padding: 5px;
     display: flex;
@@ -62,7 +123,7 @@ fieldset {
 }
 
 .skeleton-loader {
-  margin-bottom: 0!important;
+  margin-bottom: 0 !important;
 }
 
 button.cdk-drag-handle {
@@ -80,9 +141,9 @@ mat-list-option {
 }
 
 .mat-expansion-panel {
-  border-radius: 15px!important;
+  border-radius: 15px !important;
   .mat-expansion-panel-header {
-    border-radius: 15px!important;
+    border-radius: 15px !important;
   }
 }
 
@@ -94,12 +155,12 @@ mat-list-option {
 }
 
 .mat-list-item {
-  height: auto!important;
+  height: auto !important;
 }
 
 .mat-list-item-content {
-  height: auto!important;
-  padding: 15px!important;
+  height: auto !important;
+  padding: 15px !important;
   .cdk-drag-handle {
     margin-right: 10px;
   }
