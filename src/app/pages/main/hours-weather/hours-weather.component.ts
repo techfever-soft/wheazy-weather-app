@@ -9,8 +9,9 @@ import { Observable } from 'rxjs';
 export class HoursWeatherComponent implements OnInit {
   @Input('hours') hours!: any[];
   @Input('unit') unit!: Observable<string>;
+  @Input('isLoading') isLoading: boolean = true;
   public fakeHours: number[] = [];
-
+  
   constructor() {
     for (let i = 0; i < 12; i++) {
       this.fakeHours.push(i);

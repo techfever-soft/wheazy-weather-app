@@ -1,4 +1,4 @@
-<div class="wheazy__weather" *ngIf="!days.length">
+<div class="wheazy__weather" *ngIf="isLoading">
   <div mat-dialog-title class="text-center">
     <ngx-skeleton-loader
       animation="progress-dark"
@@ -94,7 +94,7 @@
   </div>
 </div>
 
-<div class="wheazy__weather" *ngIf="days.length">
+<div class="wheazy__weather" *ngIf="!isLoading">
   <div mat-dialog-title class="text-center">
     <mat-icon color="primary">date_range</mat-icon>
     <h3 class="mat-h3">Semaine</h3>

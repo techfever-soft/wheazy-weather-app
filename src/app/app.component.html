@@ -28,6 +28,7 @@
     routerLinkActive="active"
     [routerLinkActiveOptions]="{ exact: true }"
     (click)="closeDrawer()"
+    disabled
   >
     <mat-icon>settings</mat-icon> Paramètres
   </button>
@@ -55,12 +56,15 @@
 
     <div class="text-center mt-20 mb-10">
       <mat-icon color="primary">share_location</mat-icon>
-      <h4 class="mat-h4">Vos localisations</h4>
+      <h4 class="mat-h4">Vos localisations enregistrées</h4>
     </div>
 
     <div class="mt-20 mb-20 text-center">
       <p class="mat-p">
-        <b>{{ (savedLocations | async)?.length }} / 5 max.</b>
+        <b
+          >{{ (savedLocations | async)?.length }} /
+          {{ maxSavedLocations | async }} max.</b
+        >
       </p>
     </div>
 
@@ -69,10 +73,23 @@
         mat-raised-button
         color="accent"
         (click)="openAddSavedLocationDialog()"
+        [disabled]="asReachedMaxLocations"
       >
         <mat-icon> add_location_alt </mat-icon> Ajouter une localisation
       </button>
     </div>
+
+    <!-- TODO: for next release -->
+    <!-- <div>
+      <mat-form-field appearance="outline" style="width: 100%; padding: 0 10px">
+        <mat-label> Afficher un nombre limité </mat-label>
+        <mat-select value="all" disabled>
+          <mat-option value="all"> Tout </mat-option>
+          <mat-option> 5 </mat-option>
+          <mat-option> 10 </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div> -->
 
     <div class="mb-20 text-center" *ngIf="isNotAtWeatherPage">
       <button color="primary" mat-button routerLink="/main">

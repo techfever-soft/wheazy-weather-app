@@ -15,11 +15,11 @@
   </div>
 </div>
 
-<div *ngIf="(savedLocations | async)?.length">
-  <div class="mt-20 mb-20" *ngIf="showDebug | async">
-    <app-debug-panel></app-debug-panel>
-  </div>
+<div class="mt-20 mb-20" *ngIf="showDebug | async">
+  <app-debug-panel></app-debug-panel>
+</div>
 
+<div *ngIf="(savedLocations | async)?.length">
   <app-actual-weather
     [currentWeather]="currentWeather"
     [isLoading]="isCurrentWeatherLoading"
@@ -85,6 +85,7 @@
 
   <div class="mt-20">
     <app-hours-weather
+      [isLoading]="isCurrentWeatherLoading"
       [hours]="actualHoursWeather"
       [unit]="unit"
     ></app-hours-weather>
@@ -92,6 +93,7 @@
 
   <div class="mt-20">
     <app-days-weather
+      [isLoading]="isCurrentWeatherLoading"
       [days]="actualDaysWeather"
       [unit]="unit"
     ></app-days-weather>

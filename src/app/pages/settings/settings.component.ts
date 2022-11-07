@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LocationService } from 'src/app/core/services/location.service';
 import { WeatherService } from 'src/app/core/services/weather.service';
 
 @Component({
@@ -9,7 +10,10 @@ import { WeatherService } from 'src/app/core/services/weather.service';
 export class SettingsComponent implements OnInit {
   public debug: any;
 
-  constructor(private weatherService: WeatherService) {
+  constructor(
+    private weatherService: WeatherService,
+    private locationService: LocationService
+  ) {
     this.debug = this.weatherService.debug;
   }
 
@@ -21,6 +25,10 @@ export class SettingsComponent implements OnInit {
     } else {
       this.weatherService.unit = 'fahrenheit';
     }
+  }
+
+  public changeMaxLocations(event: any) {
+    this.locationService.maxLocations = event.value;
   }
 
   public toggleDebug(event: any) {

@@ -6,8 +6,13 @@
 </div>
 
 <div mat-dialog-content>
+  <p class="mat-caption text-muted">
+    Ajoutez une localisation à votre liste, qui sera elle-même stockée dans
+    votre navigateur.
+  </p>
+
   <form [formGroup]="newLocationForm">
-    <div class="wheazy__form-layout">
+    <div class="wheazy__form-layout mt-20">
       <div class="text-center mb-20">
         <button mat-raised-button color="primary" (click)="getUserLocation()">
           <mat-icon>my_location</mat-icon> Utiliser ma géolocalisation
@@ -15,11 +20,18 @@
       </div>
 
       <mat-form-field appearance="outline">
-        <mat-label>Entrez l'addresse de votre choix</mat-label>
+        <mat-label>Pays de préférence</mat-label>
+        <mat-select value="fr" disabled>
+          <mat-option value="fr">France</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Rechercher une addresse</mat-label>
         <input
           type="text"
           matInput
-          placeholder="Commencez à écrire pour rechercher"
+          placeholder="Commencez à écrire..."
           formControlName="place"
           (input)="onAddressChange()"
           #addressText
@@ -31,9 +43,15 @@
 
       <fieldset>
         <legend class="text-icon">
-          <mat-icon>pin_drop</mat-icon> Placez votre localisation où vous
-          souhaitez
+          <mat-icon>pin_drop</mat-icon> Placez votre localisation sur la carte
         </legend>
+
+        <div class="mb-20">
+          <p class="mat-caption text-muted">
+            Info : vous pouvez aussi déplacer le marqueur ou vous le souhaitez
+          </p>
+        </div>
+
         <div *ngIf="mapsLoaded | async">
           <google-map
             [options]="mapOptions"

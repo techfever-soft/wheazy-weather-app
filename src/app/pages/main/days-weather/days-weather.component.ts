@@ -10,6 +10,7 @@ import { DayWeather } from 'src/app/core/interfaces/weather.interface';
 export class DaysWeatherComponent implements OnInit {
   @Input('days') days!: DayWeather[];
   @Input('unit') unit!: Observable<string>;
+  @Input('isLoading') isLoading: boolean = true;
   public fakeDays: number[] = [];
 
   constructor() {

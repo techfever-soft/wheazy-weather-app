@@ -1,10 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import moment from 'moment';
 import { Observable } from 'rxjs';
-import {
-  AirQuality,
-  CurrentWeather,
-} from 'src/app/core/interfaces/weather.interface';
+import { CurrentWeather } from 'src/app/core/interfaces/weather.interface';
 
 @Component({
   selector: 'app-actual-weather',

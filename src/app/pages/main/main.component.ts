@@ -23,15 +23,12 @@ export class MainComponent implements OnInit {
   public currentWeather!: CurrentWeather;
   public actualHoursWeather: any[] = [];
   public actualDaysWeather: DayWeather[] = [];
-  
+
   public currentAirQuality!: Observable<AirQuality>;
 
   public isCurrentWeatherLoading: boolean = true;
-  // TODO: others loaders
-  // public isLoading: boolean = true;
-  // public isLoading: boolean = true;
 
-  public isAirQualityShowed: boolean = true;
+  public isAirQualityShowed: boolean = false;
 
   public showDebug: Observable<boolean>;
   public unit: Observable<string>;
@@ -53,8 +50,7 @@ export class MainComponent implements OnInit {
       .subscribe((location: SavedLocationPoint) => {
         if (location && location.selected) {
           this.weatherService.fetchWeatherAtLocation(location);
-      this.currentAirQuality = this.weatherService.getAirQuality();
-
+          this.currentAirQuality = this.weatherService.getAirQuality();
         }
       });
 
@@ -88,12 +84,9 @@ export class MainComponent implements OnInit {
           }, 2500);
         }
       });
-
   }
 
-  ngOnInit(): void {
-    // this.openAddSavedLocationDialog();
-  }
+  ngOnInit(): void {}
 
   public toggleAirQuality() {
     this.isAirQualityShowed = !this.isAirQualityShowed;

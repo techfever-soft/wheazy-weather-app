@@ -7,6 +7,7 @@ import {
   LocationPoint,
   SavedLocationPoint,
 } from '../interfaces/location.interface';
+import { AppService } from './app.service';
 
 @Injectable({
   providedIn: 'root',
@@ -53,16 +54,14 @@ export class LocationService {
   private currentLocation$: BehaviorSubject<SavedLocationPoint> =
     new BehaviorSubject(this.savedLocations$.getValue()[0]);
 
-  
   // ANCHOR: settings
   private maxLocations$: BehaviorSubject<number> = new BehaviorSubject(5);
 
-  constructor(private matDialog: MatDialog) {}
+  constructor(private matDialog: MatDialog, private app: AppService) {}
 
   public set maxLocations(max: number) {
     this.maxLocations$.next(max);
   }
-
 
   public set currentLocation(newLocation: SavedLocationPoint) {
     let newLocations = this.savedLocations$.value;
@@ -76,19 +75,35 @@ export class LocationService {
     this.currentLocation$.next(newLocation);
     this.savedLocations$.next(newLocations);
 
+    window.localStorage.setItem('savedLocations', JSON.stringify(newLocations));
     window.localStorage.setItem('currentLocation', JSON.stringify(newLocation));
+
+    this.app.openSnackBar('Localisation actuelle sélectionnée');
   }
 
   public set savedLocations(newLocation: SavedLocationPoint) {
-    let newLocationsArray = this.savedLocations$.getValue();
-    newLocationsArray.push(newLocation);
+    if (
+      this.getSavedLocationsNative().length <= this.maxLocations$.getValue()
+    ) {
+      let newLocationsArray = this.savedLocations$.getValue();
+      newLocationsArray.push(newLocation);
 
-    this.savedLocations$.next(newLocationsArray);
+      this.savedLocations$.next(newLocationsArray);
 
-    window.localStorage.setItem(
-      'savedLocations',
-      JSON.stringify(newLocationsArray)
-    );
+      window.localStorage.setItem(
+        'savedLocations',
+        JSON.stringify(newLocationsArray)
+      );
+      this.app.openSnackBar('Nouvelle localisation ajoutée');
+    } else {
+      this.app.openSnackBar('Nombre maximal de localisation atteint');
+    }
+  }
+
+  public setSavedLocations(locations: SavedLocationPoint[]) {
+    this.savedLocations$.next(locations);
+
+    window.localStorage.setItem('savedLocations', JSON.stringify(locations));
   }
 
   public deleteSavedLocation(index: number) {
@@ -96,12 +111,23 @@ export class LocationService {
     newLocationsArray.splice(index, 1);
 
     this.savedLocations$.next(newLocationsArray);
+
+    window.localStorage.setItem(
+      'savedLocations',
+      JSON.stringify(newLocationsArray)
+    );
+
+    this.app.openSnackBar('Localisation supprimée');
   }
 
   public openAddLocationDialog() {
     this.matDialog.open(AddSavedLocationDialogComponent, {
       // maxHeight: '500px',
     });
+  }
+
+  public getMaxLocations(): Observable<number> {
+    return this.maxLocations$.asObservable();
   }
 
   public getCurrentLocationNative(): SavedLocationPoint {

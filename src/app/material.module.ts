@@ -17,6 +17,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule} from '@angular/material/chips';
+import { MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
@@ -40,7 +41,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatRippleModule,
     MatSlideToggleModule,
     MatCheckboxModule,
-    MatChipsModule,
+    MatChipsModule,MatSnackBarModule
   ],
   exports: [
     MatIconModule,
@@ -61,7 +62,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatRippleModule,
     MatSlideToggleModule,
     MatCheckboxModule,
-    MatChipsModule,
+    MatChipsModule,MatSnackBarModule
   ],
 })
 export class MaterialModule {}

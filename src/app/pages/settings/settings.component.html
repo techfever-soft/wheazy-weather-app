@@ -40,7 +40,7 @@
       <div>
         <mat-form-field appearance="outline">
           <mat-label>Nombre de localisations maximal</mat-label>
-          <mat-select value="5">
+          <mat-select value="5" (selectionChange)="changeMaxLocations($event)">
             <mat-option value="5">5 localisations max.</mat-option>
             <mat-option value="10">10 localisations max.</mat-option>
             <mat-option value="15">15 localisations max.</mat-option>

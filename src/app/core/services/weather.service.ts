@@ -110,7 +110,6 @@ export class WeatherService {
 
     // ANCHOR: get actual air quality
     this.apiService.fetchAirQuality(location).then((res: any) => {
-      console.log(res);
       const finalAirQuality: AirQuality = this.transformAirQuality(res);
 
       this.currentAirQuality$.next(finalAirQuality);
@@ -151,12 +150,12 @@ export class WeatherService {
       particles: {
         pm10: {
           status: rawAirQuality.particles.pm10 > 10 ? 'medium' : 'low',
-          value: rawAirQuality.particles.pm10
+          value: rawAirQuality.particles.pm10,
         },
         pm2_5: {
           status: rawAirQuality.particles.pm2_5 > 10 ? 'medium' : 'low',
-          value: rawAirQuality.particles.pm2_5
-        }
+          value: rawAirQuality.particles.pm2_5,
+        },
       },
       // TODO: reform others
       pollens: {
@@ -296,7 +295,37 @@ export class WeatherService {
   }
 
   private translateWeatherDescription(code: number) {
-    return 'Temps nuageux';
+    let description = '';
+
+    if (code === 0 || code === 1) {
+      description = 'Temps clair';
+    }
+    if (code === 2 || code === 3) {
+      description = 'Partiellement couvert';
+    }
+    if (code === 45 || code === 48) {
+      description = 'Temps brumeux';
+    }
+    if (code === 61 || code === 63 || code === 65) {
+      description = 'Temps pluvieux';
+    }
+    if (code === 80 || code === 81 || code === 82) {
+      description = 'Averses éparses';
+    }
+    if (code === 95 || code === 96 || code === 99) {
+      description = 'Temps orageux';
+    }
+    if (code === 71 || code === 85) {
+      description = 'Neige éparse';
+    }
+    if (code === 73 || code === 75 || code === 86) {
+      description = 'Averses de neige';
+    }
+    if (code === 77) {
+      description = 'Temps de neige';
+    }
+
+    return description;
   }
 
   public setActualDayTime() {

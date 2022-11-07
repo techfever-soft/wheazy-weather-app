@@ -14,6 +14,7 @@ import {
 } from '@awesome-cordova-plugins/geolocation/ngx';
 import { v4 as uuidv4 } from 'uuid';
 import { LocationService } from 'src/app/core/services/location.service';
+import { AppService } from 'src/app/core/services/app.service';
 
 @Component({
   selector: 'app-add-saved-location-dialog',
@@ -27,13 +28,13 @@ export class AddSavedLocationDialogComponent implements OnInit {
   public newLocationForm: FormGroup;
 
   public mapOptions: google.maps.MapOptions = {
-    center: { lat: 40, lng: -20 },
+    center: { lat: 48.856614, lng: 2.3522219 },
     zoom: 4,
     streetViewControl: false,
     zoomControl: false,
     mapTypeControl: false,
   };
-  public mapCenter = { lat: 40, lng: -20 };
+  public mapCenter = { lat: 48.856614, lng: 2.3522219 };
   public mapZoom = 5;
   public markerOptions: google.maps.MarkerOptions = {
     draggable: true,
@@ -53,7 +54,8 @@ export class AddSavedLocationDialogComponent implements OnInit {
     private geolocation: Geolocation,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddSavedLocationDialogComponent>,
-    private locationService: LocationService
+    private locationService: LocationService,
+    private app: AppService
   ) {
     this.newLocationForm = this.fb.group({
       place: ['', Validators.required],
@@ -201,12 +203,6 @@ export class AddSavedLocationDialogComponent implements OnInit {
       createdAt: new Date(),
       simplifiedAddress: formatted_address,
       selected: false,
-
-      // formatted_address,
-      // province,
-      // zip,
-      // city,
-      // country,
     };
   }
 

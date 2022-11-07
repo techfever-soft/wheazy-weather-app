@@ -133,7 +133,7 @@ export class ApiService {
     );
     const result = await request.json();
 
-    console.log(result);
+    // console.log(result);
 
     const rawAirQuality = {
       uvIndex: result.hourly.uv_index as any[],

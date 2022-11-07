@@ -12,47 +12,97 @@
     </h3>
   </div>
 
-  <div>
+  <fieldset>
+    <legend class="text-icon"><mat-icon>access_time</mat-icon> Versions</legend>
+
+    <div>
+      <span class="text-center">
+        <h2 class="mat-h2">
+          <b>v{{ version }}</b>
+        </h2>
+        <p class="mat-p text-muted">
+          dernière version {{ timestamp | amLocale: "fr" | amTimeAgo }}
+        </p>
+      </span>
+    </div>
+
+    <div class="mt-10 mb-10">
+      <fieldset>
+        <legend class="text-icon">
+          <mat-icon>edit_note</mat-icon> À faire
+        </legend>
+
+        <ul style="padding:0">
+          <li *ngFor="let todo of todos" class="text-icon">
+            <mat-icon>{{ todo.done ? 'check' : 'close' }}</mat-icon> {{ todo.task }}
+          </li>
+        </ul>
+      </fieldset>
+    </div>
+
+    <div class="mt-20 mb-10">
+      <mat-divider></mat-divider>
+    </div>
+
+    <div class="mt-10">
+      <fieldset *ngFor="let log of changeLogs" class="mt-10">
+        <legend class="text-icon">
+          <mat-icon>tag</mat-icon> v{{ log.version }}
+        </legend>
+        <span class="mat-caption text-muted">
+          {{ log.description }}<br />
+          <ul>
+            <li *ngFor="let change of log.changes">
+              {{ change }}
+            </li>
+          </ul>
+        </span>
+      </fieldset>
+    </div>
+  </fieldset>
+
+  <fieldset class="mt-20">
+    <legend class="text-icon"><mat-icon>group</mat-icon> Éditeur</legend>
     <div class="wheazy__about">
-        <a
-          matRipple
-          matTooltip="Visiter le site web"
-          href="https://techfever.dev"
-          target="_blank"
-        >
-          <img
-            src="/assets/techfever-logo-black.svg"
-            alt="Logo Techfever"
-            class="logo mat-elevation-z3"
-          />
-          <h4 class="mat-h4"><b>Techfever</b></h4>
-          <p class="mat-caption text-muted">
-            Productions digitales indépendentes
-          </p>
-        </a>
-      </div>
-  
-      <div class="mt-10 text-center">
-        <a
-          mat-button
-          color="accent"
-          href="https://techfever.dev/works"
-          target="_blank"
-        >
-          <mat-icon>open_in_new</mat-icon>
-          Voir les autres créations
-        </a>
-        <br />
-        <br />
-        <a
-          mat-raised-button
-          color="primary"
-          href="https://www.patreon.com/techfever"
-          target="_blank"
-        >
-          <img src="/assets/patreon.svg" alt="Logo Patreon" />
-          Donner sur Patreon
-        </a>
-      </div>
-  </div>
+      <a
+        matRipple
+        matTooltip="Visiter le site web"
+        href="https://techfever.dev"
+        target="_blank"
+      >
+        <img
+          src="/assets/techfever-logo-black.svg"
+          alt="Logo Techfever"
+          class="logo mat-elevation-z3"
+        />
+        <h4 class="mat-h4"><b>Tech Fever</b></h4>
+        <p class="mat-caption text-muted">
+          Productions digitales indépendentes
+        </p>
+      </a>
+    </div>
+
+    <div class="mb-20 text-center">
+      <a
+        mat-button
+        color="accent"
+        href="https://techfever.dev/works"
+        target="_blank"
+      >
+        <mat-icon>open_in_new</mat-icon>
+        Voir les autres créations
+      </a>
+      <br />
+      <br />
+      <a
+        mat-raised-button
+        color="primary"
+        href="https://www.patreon.com/techfever"
+        target="_blank"
+      >
+        <img src="/assets/patreon.svg" alt="Logo Patreon" />
+        Donner sur Patreon
+      </a>
+    </div>
+  </fieldset>
 </div>
