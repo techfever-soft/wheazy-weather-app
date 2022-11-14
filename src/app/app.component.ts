@@ -15,6 +15,7 @@ import { WeatherService } from './core/services/weather.service';
 })
 export class AppComponent {
   public savedLocations: Observable<SavedLocationPoint[]>;
+  public currentLocation: Observable<SavedLocationPoint>;
 
   public currentSeason: Observable<string>;
   public currentSeasonAsNumber: Observable<number>;
@@ -35,6 +36,7 @@ export class AppComponent {
   ) {
     // TODO: Pipe saved locations until it reach maxSavedLocations
     this.savedLocations = this.locationService.getSavedLocations();
+    this.currentLocation = this.locationService.getCurrentLocation();
 
     this.currentSeason = this.weatherService.getCurrentSeason();
     this.currentSeasonAsNumber = this.weatherService.getCurrentSeasonAsNumber();
@@ -54,19 +56,19 @@ export class AppComponent {
   }
 
   public get asReachedMaxLocations(): boolean {
-    let savedLength = 0;
-    this.savedLocations.subscribe((saved) => {
-      savedLength = saved.length;
-    });
+    // let savedLength = 0;
+    // this.savedLocations.subscribe((saved) => {
+    //   savedLength = saved.length;
+    // });
 
-    let maxLength = 0;
-    this.maxSavedLocations.subscribe((max) => {
-      maxLength = max;
-    });
+    // let maxLength = 0;
+    // this.maxSavedLocations.subscribe((max) => {
+    //   maxLength = max;
+    // });
 
-    if (savedLength >= maxLength) {
-      return true;
-    }
+    // if (savedLength >= maxLength) {
+    //   return true;
+    // }
 
     return false;
   }
@@ -80,31 +82,18 @@ export class AppComponent {
   }
 
   public selectLocation(location: SavedLocationPoint) {
-    this.locationService.currentLocation = location;
+    this.locationService.setCurrentLocation(location);
   }
 
   public deleteSavedLocation(index: number) {
     this.locationService.deleteSavedLocation(index);
   }
 
-  public openAddSavedLocationDialog() {
-    this.locationService.openAddLocationDialog();
+  public onLocationDropped(event: CdkDragDrop<SavedLocationPoint>) {
+    this.locationService.moveLocation(event);
   }
 
-  public onLocationDropped(event: CdkDragDrop<SavedLocationPoint>) {
-    let newSavedLocations;
-    this.locationService.getSavedLocations().subscribe((savedLocations) => {
-      newSavedLocations = savedLocations;
-
-      moveItemInArray(
-        newSavedLocations,
-        event.previousIndex,
-        event.currentIndex
-      );
-
-      this.locationService.setSavedLocations(newSavedLocations);
-
-      this.app.openSnackBar('Localisation déplacée');
-    });
+  public openAddSavedLocationDialog() {
+    this.locationService.openAddLocationDialog();
   }
 }

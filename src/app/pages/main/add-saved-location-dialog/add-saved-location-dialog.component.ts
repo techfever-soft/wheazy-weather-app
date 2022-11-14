@@ -96,8 +96,6 @@ export class AddSavedLocationDialogComponent implements OnInit {
     this.geolocation
       .getCurrentPosition()
       .then((location: Geoposition) => {
-        console.log(location);
-
         this.geolocate(location.coords.latitude, location.coords.longitude);
       })
       .catch((e) => {
@@ -113,7 +111,6 @@ export class AddSavedLocationDialogComponent implements OnInit {
         location: { ...this.mapCenter },
       },
       (place: google.maps.GeocoderResult[]) => {
-        console.log(place);
         const picked_place = this.formalizePickedPlace(place);
         const place_components = picked_place.address;
         if (place_components && place_components.country) {
@@ -129,7 +126,6 @@ export class AddSavedLocationDialogComponent implements OnInit {
                 place_components.country
             );
           this.pickedPlace = picked_place;
-          console.log(this.pickedPlace);
           this.newLocationForm?.get('place')?.markAsTouched();
           this.newLocationForm?.get('place')?.setErrors(null);
         } else {
@@ -221,8 +217,11 @@ export class AddSavedLocationDialogComponent implements OnInit {
   }
 
   public addLocation() {
-    if (this.pickedPlace && this.pickedPlace.createdAt) {
-      this.locationService.savedLocations = this.pickedPlace;
+    if (this.pickedPlace) {
+      console.log(this.pickedPlace);
+
+      this.locationService.addSavedLocation(this.pickedPlace);
+      
       this.dialogRef.close();
     }
   }

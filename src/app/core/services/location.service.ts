@@ -1,123 +1,78 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 import { AddSavedLocationDialogComponent } from 'src/app/pages/main/add-saved-location-dialog/add-saved-location-dialog.component';
 import {
-  AddressComponents,
-  LocationPoint,
-  SavedLocationPoint,
-} from '../interfaces/location.interface';
+  addSavedLocationAction,
+  getCurrentLocationAction,
+  getSavedLocationsAction,
+  setCurrentLocationAction,
+  moveSavedLocationsAction,
+  setSelectedSavedLocationAction,
+  deleteSavedLocationAction,
+} from '../state/location.action';
+import { SavedLocationPoint } from '../interfaces/location.interface';
 import { AppService } from './app.service';
+import {
+  currentLocationsSelector,
+  savedLocationsSelector,
+} from '../state/location.selectors';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocationService {
-  private savedLocations$: BehaviorSubject<SavedLocationPoint[]> =
-    new BehaviorSubject([
-      {
-        position: <LocationPoint>{
-          lat: 0,
-          lng: 0,
-        },
-        address: <AddressComponents>{
-          city: '',
-          province: '',
-          zip: 0,
-          formattedAddress: '',
-          street: '',
-          country: '',
-        },
-        createdAt: new Date(),
-        simplifiedAddress: 'test 1',
-        selected: true,
-      },
-      {
-        position: <LocationPoint>{
-          lat: 1,
-          lng: 1,
-        },
-        address: <AddressComponents>{
-          city: '',
-          province: '',
-          zip: 0,
-          formattedAddress: '',
-          street: '',
-          country: '',
-        },
-        createdAt: new Date(),
-        simplifiedAddress: 'test 2',
-        selected: false,
-      },
-    ]);
-
-  private currentLocation$: BehaviorSubject<SavedLocationPoint> =
-    new BehaviorSubject(this.savedLocations$.getValue()[0]);
+  private savedLocations$: Observable<SavedLocationPoint[]> = this.store.select(
+    savedLocationsSelector
+  );
+  private currentLocation$: Observable<SavedLocationPoint> = this.store.select(
+    currentLocationsSelector
+  );
 
   // ANCHOR: settings
   private maxLocations$: BehaviorSubject<number> = new BehaviorSubject(5);
 
-  constructor(private matDialog: MatDialog, private app: AppService) {}
+  constructor(
+    private matDialog: MatDialog,
+    private app: AppService,
+    private store: Store<{
+      savedLocations: SavedLocationPoint[];
+      currentLocation: SavedLocationPoint;
+    }>
+  ) {
+    this.store.dispatch(getSavedLocationsAction());
+    this.store.dispatch(getCurrentLocationAction());
+
+    // this.savedLocations$.subscribe((state) => {
+    //   console.log('savedLocations =>', state);
+    // });
+
+    // this.currentLocation$.subscribe((state) => {
+    //   console.log('currentLocation =>', state);
+    // });
+  }
 
   public set maxLocations(max: number) {
     this.maxLocations$.next(max);
   }
 
-  public set currentLocation(newLocation: SavedLocationPoint) {
-    let newLocations = this.savedLocations$.value;
-
-    newLocations.forEach((location: SavedLocationPoint) => {
-      location.selected = false;
-    });
-
-    newLocation.selected = true;
-
-    this.currentLocation$.next(newLocation);
-    this.savedLocations$.next(newLocations);
-
-    window.localStorage.setItem('savedLocations', JSON.stringify(newLocations));
-    window.localStorage.setItem('currentLocation', JSON.stringify(newLocation));
-
-    this.app.openSnackBar('Localisation actuelle sélectionnée');
+  public moveLocation(event: CdkDragDrop<SavedLocationPoint>) {
+    this.store.dispatch(moveSavedLocationsAction(event));
   }
 
-  public set savedLocations(newLocation: SavedLocationPoint) {
-    if (
-      this.getSavedLocationsNative().length <= this.maxLocations$.getValue()
-    ) {
-      let newLocationsArray = this.savedLocations$.getValue();
-      newLocationsArray.push(newLocation);
-
-      this.savedLocations$.next(newLocationsArray);
-
-      window.localStorage.setItem(
-        'savedLocations',
-        JSON.stringify(newLocationsArray)
-      );
-      this.app.openSnackBar('Nouvelle localisation ajoutée');
-    } else {
-      this.app.openSnackBar('Nombre maximal de localisation atteint');
-    }
+  public setCurrentLocation(location: SavedLocationPoint) {
+    this.store.dispatch(setSelectedSavedLocationAction(location));
+    this.store.dispatch(setCurrentLocationAction(location));
   }
 
-  public setSavedLocations(locations: SavedLocationPoint[]) {
-    this.savedLocations$.next(locations);
-
-    window.localStorage.setItem('savedLocations', JSON.stringify(locations));
+  public addSavedLocation(location: SavedLocationPoint) {
+    this.store.dispatch(addSavedLocationAction(location));
   }
 
   public deleteSavedLocation(index: number) {
-    let newLocationsArray = this.savedLocations$.getValue();
-    newLocationsArray.splice(index, 1);
-
-    this.savedLocations$.next(newLocationsArray);
-
-    window.localStorage.setItem(
-      'savedLocations',
-      JSON.stringify(newLocationsArray)
-    );
-
-    this.app.openSnackBar('Localisation supprimée');
+    this.store.dispatch(deleteSavedLocationAction(index));
   }
 
   public openAddLocationDialog() {
@@ -130,31 +85,11 @@ export class LocationService {
     return this.maxLocations$.asObservable();
   }
 
-  public getCurrentLocationNative(): SavedLocationPoint {
-    return this.currentLocation$.getValue();
-  }
-
   public getCurrentLocation(): Observable<SavedLocationPoint> {
-    return this.currentLocation$.asObservable();
-  }
-
-  public getSavedLocationsNative(): SavedLocationPoint[] {
-    return this.savedLocations$.getValue();
+    return this.store.select(currentLocationsSelector);
   }
 
   public getSavedLocations(): Observable<SavedLocationPoint[]> {
-    const rawSavedLocations = window.localStorage.getItem(
-      'savedLocations'
-    ) as string;
-
-    const savedLocationStorage = JSON.parse(
-      rawSavedLocations
-    ) as SavedLocationPoint[];
-
-    if (savedLocationStorage && savedLocationStorage.length) {
-      this.savedLocations$.next(savedLocationStorage);
-    }
-
-    return this.savedLocations$.asObservable();
+    return this.store.select(savedLocationsSelector);
   }
 }

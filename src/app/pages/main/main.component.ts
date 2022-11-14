@@ -93,7 +93,7 @@ export class MainComponent implements OnInit {
   }
 
   public selectLocation(location: SavedLocationPoint): void {
-    this.locationService.currentLocation = location;
+    this.locationService.setCurrentLocation(location);
   }
 
   public openAddSavedLocationDialog() {
