@@ -18,10 +18,10 @@ const routes: Routes = [
     path: 'about',
     component: AboutComponent,
   },
-  {
-    path: 'settings',
-    component: SettingsComponent,
-  },
+  // {
+  //   path: 'settings',
+  //   component: SettingsComponent,
+  // },
 ];
 
 @NgModule({

@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/wheazy",
+    "public": "dist/wheazy-weather-app",
     "site": "wheazy",
     "ignore": [
       "firebase.json",
