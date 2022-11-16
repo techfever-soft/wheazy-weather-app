@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { faGithub, faPatreon } from '@fortawesome/free-brands-svg-icons';
 import moment from 'moment';
 import build from 'src/build';
 
@@ -8,16 +9,27 @@ import build from 'src/build';
   styleUrls: ['./about.component.scss'],
 })
 export class AboutComponent implements OnInit {
+  public faGithub = faGithub;
+  public faPatreon = faPatreon;
+  
   public version = build.version;
   public timestamp = new Date(build.timestamp);
 
   public todos = [
-    { done: true, task: "Ajout de la qualité de l'air" },
+    { done: false, task: "Relier les paramètres à leur page" },
     { done: false, task: 'Ajout de graphiques' },
     { done: false, task: 'Pouvoir visualiser un jour donné' },
   ];
 
   public changeLogs = [
+    {
+      version: '0.1.3',
+      description: 'Added air pollution',
+      changes: [
+        'added air pollution',
+        'added NgRX',
+      ],
+    },
     {
       version: '0.1.2',
       description: 'Added changelogs',

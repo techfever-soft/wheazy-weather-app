@@ -1,12 +1,234 @@
-<div class="wheazy__weather">
+<div class="wheazy__weather" [hidden]="!isLoading">
+  <div mat-dialog-title class="text-center">
+    <ngx-skeleton-loader
+      animation="progress-dark"
+      appearance="circle"
+      [theme]="{
+        background: 'rgba(255,255,255, 0.25)',
+        width: '25px',
+        height: '25px'
+      }"
+    ></ngx-skeleton-loader>
+    <br />
+    <ngx-skeleton-loader
+      animation="progress-dark"
+      [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '75px' }"
+    ></ngx-skeleton-loader>
+  </div>
+
+  <div class="wheazy__air-quality">
+    <fieldset class="group">
+      <legend>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '100px' }"
+        ></ngx-skeleton-loader>
+      </legend>
+      <div class="item">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '15px',
+            height: '15px'
+          }"
+        ></ngx-skeleton-loader>
+        <div class="item-content">
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{
+              background: 'rgba(255,255,255, 0.25)',
+              width: '75px',
+              height: '15px'
+            }"
+          ></ngx-skeleton-loader>
+          <br />
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{
+              background: 'rgba(255,255,255, 0.25)',
+              width: '50px',
+              height: '15px'
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="item">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '15px',
+            height: '15px'
+          }"
+        ></ngx-skeleton-loader>
+        <div class="item-content">
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{
+              background: 'rgba(255,255,255, 0.25)',
+              width: '75px',
+              height: '15px'
+            }"
+          ></ngx-skeleton-loader>
+          <br />
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{
+              background: 'rgba(255,255,255, 0.25)',
+              width: '50px',
+              height: '15px'
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset class="group">
+      <legend>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '100px' }"
+        ></ngx-skeleton-loader>
+      </legend>
+      <div class="item">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '15px',
+            height: '15px'
+          }"
+        ></ngx-skeleton-loader>
+        <div class="item-content">
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{
+              background: 'rgba(255,255,255, 0.25)',
+              width: '75px',
+              height: '15px'
+            }"
+          ></ngx-skeleton-loader>
+          <br />
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{
+              background: 'rgba(255,255,255, 0.25)',
+              width: '50px',
+              height: '15px'
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="item">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '15px',
+            height: '15px'
+          }"
+        ></ngx-skeleton-loader>
+        <div class="item-content">
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{
+              background: 'rgba(255,255,255, 0.25)',
+              width: '75px',
+              height: '15px'
+            }"
+          ></ngx-skeleton-loader>
+          <br />
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{
+              background: 'rgba(255,255,255, 0.25)',
+              width: '50px',
+              height: '15px'
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+      </div>
+    </fieldset>
+    <fieldset class="group">
+      <legend>
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          [theme]="{ background: 'rgba(255,255,255, 0.25)', width: '100px' }"
+        ></ngx-skeleton-loader>
+      </legend>
+      <div class="item">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '15px',
+            height: '15px'
+          }"
+        ></ngx-skeleton-loader>
+        <div class="item-content">
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{
+              background: 'rgba(255,255,255, 0.25)',
+              width: '75px',
+              height: '15px'
+            }"
+          ></ngx-skeleton-loader>
+          <br />
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{
+              background: 'rgba(255,255,255, 0.25)',
+              width: '50px',
+              height: '15px'
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+      </div>
+      <div class="item">
+        <ngx-skeleton-loader
+          animation="progress-dark"
+          appearance="circle"
+          [theme]="{
+            background: 'rgba(255,255,255, 0.25)',
+            width: '15px',
+            height: '15px'
+          }"
+        ></ngx-skeleton-loader>
+        <div class="item-content">
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{
+              background: 'rgba(255,255,255, 0.25)',
+              width: '75px',
+              height: '15px'
+            }"
+          ></ngx-skeleton-loader>
+          <br />
+          <ngx-skeleton-loader
+            animation="progress-dark"
+            [theme]="{
+              background: 'rgba(255,255,255, 0.25)',
+              width: '50px',
+              height: '15px'
+            }"
+          ></ngx-skeleton-loader>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+</div>
+
+<div class="wheazy__weather" [hidden]="isLoading">
   <div mat-dialog-title class="text-center">
     <mat-icon color="primary">masks</mat-icon>
     <h3 class="mat-h3">Qualité de l'air</h3>
   </div>
-
-  <!-- <pre>
-    {{ currentAirQuality | async | json }}
-  </pre> -->
 
   <div class="wheazy__air-quality">
     <fieldset class="group">
@@ -24,7 +246,7 @@
           </p>
         </div>
       </div>
-      <div class="item low">
+      <div class="item">
         <span
           class="status {{
             (currentAirQuality | async)?.particles?.pm2_5?.status
@@ -55,38 +277,37 @@
     <fieldset class="group">
       <legend>Gaz</legend>
       <div class="item">
-        <span class="status low"></span>
+        <span class="status {{ (currentAirQuality | async)?.gases?.carbonMonoxide?.status }}"></span>
         <div class="item-content">
           <p class="mat-p">Monoxyde de carbone (CO)</p>
           <p class="mat-caption text-muted">
-            {{ (currentAirQuality | async)?.gases?.carbonMonoxide }} μg/m³
+            {{ (currentAirQuality | async)?.gases?.carbonMonoxide?.value }} μg/m³
           </p>
         </div>
       </div>
-      <!-- TODO : reform others -->
       <div class="item">
-        <span class="status medium"></span>
+        <span class="status {{ (currentAirQuality | async)?.gases?.nitrogenDioxide?.status }}"></span>
         <div class="item-content">
           <p class="mat-p">Dioxyde d'azote (NO₂)</p>
-          <p class="mat-caption text-muted">12 μg/m³</p>
+          <p class="mat-caption text-muted">{{ (currentAirQuality | async)?.gases?.nitrogenDioxide?.value }} μg/m³</p>
         </div>
       </div>
       <div class="item">
-        <span class="status caution"></span>
+        <span class="status {{ (currentAirQuality | async)?.gases?.sulphurDioxide?.status }}"></span>
         <div class="item-content">
           <p class="mat-p">Dioxyde de soufre (SO₂)</p>
-          <p class="mat-caption text-muted">12 μg/m³</p>
+          <p class="mat-caption text-muted">{{ (currentAirQuality | async)?.gases?.sulphurDioxide?.value }} μg/m³</p>
         </div>
       </div>
       <div class="item">
-        <span class="status caution"></span>
+        <span class="status {{ (currentAirQuality | async)?.gases?.ozone?.status }}"></span>
         <div class="item-content">
           <p class="mat-p">Ozone (O₃)</p>
-          <p class="mat-caption text-muted">12 μg/m³</p>
+          <p class="mat-caption text-muted">{{ (currentAirQuality | async)?.gases?.ozone?.value }} μg/m³</p>
         </div>
       </div>
     </fieldset>
-    <fieldset class="group">
+    <!-- <fieldset class="group">
       <legend>Pollens</legend>
       <div class="item">
         <span class="status high"></span>
@@ -116,65 +337,6 @@
           <p class="mat-caption text-muted">12 μg/m³</p>
         </div>
       </div>
-    </fieldset>
+    </fieldset> -->
   </div>
-
-  <!-- <div class="wheazy__air-quality">
-    <div class="group">
-      <h4 class="mat-h4">Particules fines</h4>
-      <div class="item">
-        <p class="mat-caption">PM10</p>
-        <p class="mat-p"><b>12 μg/m³</b></p>
-      </div>
-    </div>
-    <div class="group">
-      <h4 class="mat-h4">Gaz</h4>
-      <div class="item">
-        <p class="mat-caption">Monoxyde de carbone (CO)</p>
-        <p class="mat-p"><b>12 μg/m³</b></p>
-      </div>
-      <div class="item">
-        <p class="mat-caption">Dioxyde d'azote (NO₂)</p>
-        <p class="mat-p"><b>12 μg/m³</b></p>
-      </div>
-      <div class="item">
-        <p class="mat-caption">Dioxyde de soufre (SO₂)</p>
-        <p class="mat-p"><b>12 μg/m³</b></p>
-      </div>
-      <div class="item">
-        <p class="mat-caption">Ozone (O₃)</p>
-        <p class="mat-p"><b>12 μg/m³</b></p>
-      </div>
-    </div>
-    <div class="group">
-        <h4 class="mat-h4">Poussières</h4>
-        <div class="item">
-          <p class="mat-caption">Sable</p>
-          <p class="mat-p"><b>12 μg/m³</b></p>
-        </div>
-        </div>
-        <div class="group">
-            <h4 class="mat-h4">Pollens</h4>
-            <div class="item">
-              <p class="mat-caption">Aulne</p>
-              <p class="mat-p"><b>12 μg/m³</b></p>
-            </div>
-            <div class="item">
-                <p class="mat-caption">Bouleau</p>
-                <p class="mat-p"><b>12 μg/m³</b></p>
-              </div>
-              <div class="item">
-                <p class="mat-caption">Gazon</p>
-                <p class="mat-p"><b>12 μg/m³</b></p>
-              </div>
-              <div class="item">
-                <p class="mat-caption">Armoise</p>
-                <p class="mat-p"><b>12 μg/m³</b></p>
-              </div>
-              <div class="item">
-                <p class="mat-caption">Olivier</p>
-                <p class="mat-p"><b>12 μg/m³</b></p>
-              </div>
-            </div>
-  </div> -->
 </div>

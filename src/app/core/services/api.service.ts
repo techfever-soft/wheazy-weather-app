@@ -1,20 +1,29 @@
 import { Injectable } from '@angular/core';
-import moment from 'moment';
 import { SavedLocationPoint } from '../interfaces/location.interface';
-import { AirQuality } from '../interfaces/weather.interface';
+
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
-  private baseWeatherUrl = 'https://api.open-meteo.com/v1/forecast?';
-  private baseAirUrl = 'https://air-quality-api.open-meteo.com/v1/air-quality?';
+  private baseWeatherUrl: string = 'https://api.open-meteo.com/v1/forecast?';
+  private baseAirUrl: string =
+    'https://air-quality-api.open-meteo.com/v1/air-quality?';
 
   constructor() {}
 
+  /**
+   * Fetch the raw weather of the entire week
+   *
+   * @public
+   * @async
+   * @param SavedLocationPoint location
+   * @returns Promise<any>
+   */
   public async fetchWeekWeather(location: SavedLocationPoint): Promise<any> {
-    const lat = location.position.lat;
-    const lng = location.position.lng;
+    const lat: number = location.position.lat;
+    const lng: number = location.position.lng;
 
     const request = await fetch(
       this.baseWeatherUrl +
@@ -27,7 +36,7 @@ export class ApiService {
     );
     const result = await request.json();
 
-    const rawWeekData = {
+    const rawWeekData: any = {
       weatherCode: result.daily.weathercode as any[],
       precipitation: result.daily.precipitation_sum as any[],
       minTemperature: result.daily.temperature_2m_min as any[],
@@ -39,9 +48,17 @@ export class ApiService {
     return rawWeekData;
   }
 
+  /**
+   * Fetch the raw current weather of the hour
+   *
+   * @public
+   * @async
+   * @param SavedLocationPoint location
+   * @returns Promise<any>
+   */
   public async fetchCurrentWeather(location: SavedLocationPoint): Promise<any> {
-    const lat = location.position.lat;
-    const lng = location.position.lng;
+    const lat: number = location.position.lat;
+    const lng: number = location.position.lng;
 
     const request = await fetch(
       this.baseWeatherUrl +
@@ -56,7 +73,7 @@ export class ApiService {
     );
     const result = await request.json();
 
-    const rawCurrentDayData = {
+    const rawCurrentDayData: any = {
       temperature: result.current_weather.temperature,
       weathercode: result.current_weather.weathercode,
       windspeed: result.current_weather.windspeed,
@@ -79,9 +96,17 @@ export class ApiService {
     return currentWeather;
   }
 
-  public async fetchHoursWeather(location: SavedLocationPoint) {
-    const lat = location.position.lat;
-    const lng = location.position.lng;
+  /**
+   * Fetch the raw weather of the day by hours
+   *
+   * @public
+   * @async
+   * @param SavedLocationPoint location
+   * @returns Promise<any>
+   */
+  public async fetchHoursWeather(location: SavedLocationPoint): Promise<any> {
+    const lat: number = location.position.lat;
+    const lng: number = location.position.lng;
 
     const request = await fetch(
       this.baseWeatherUrl +
@@ -102,11 +127,11 @@ export class ApiService {
       windSpeed: result.hourly.windspeed_10m as any[],
     };
 
-    let index = result.hourly.time.findIndex((time: string) =>
+    let index: number = result.hourly.time.findIndex((time: string) =>
       moment(time).isAfter(moment().subtract(1, 'hour'))
     );
 
-    const hourlyWeather = {
+    const hourlyWeather: any = {
       time: result.hourly.time.splice(index, 12),
       precipitation: rawHourlyWeather.precipitation.splice(index, 12),
       humidity: rawHourlyWeather.humidity.splice(index, 12),
@@ -118,9 +143,18 @@ export class ApiService {
     return hourlyWeather;
   }
 
-  public async fetchAirQuality(location: SavedLocationPoint) {
-    const lat = location.position.lat;
-    const lng = location.position.lng;
+  
+  /**
+   * Fetch the current air quality of the day
+   *
+   * @public
+   * @async
+   * @param SavedLocationPoint location
+   * @returns Promise<any>
+   */
+  public async fetchAirQuality(location: SavedLocationPoint): Promise<any> {
+    const lat: number = location.position.lat;
+    const lng: number = location.position.lng;
 
     const request = await fetch(
       this.baseAirUrl +
@@ -133,9 +167,7 @@ export class ApiService {
     );
     const result = await request.json();
 
-    // console.log(result);
-
-    const rawAirQuality = {
+    const rawAirQuality: any = {
       uvIndex: result.hourly.uv_index as any[],
       dusts: {
         sand: result.hourly.dust as any[],
@@ -160,10 +192,10 @@ export class ApiService {
       },
     };
 
-    const airQuality = {
+    const airQuality: any = {
       uvIndex: rawAirQuality.uvIndex[0],
       dusts: {
-          sand: rawAirQuality.dusts.sand[0],
+        sand: rawAirQuality.dusts.sand[0],
       },
       gases: {
         carbonMonoxide: rawAirQuality.gases.carbonMonoxide[0],

@@ -59,6 +59,54 @@
           ></ngx-skeleton-loader>
         </div>
       </div>
+      <div class="wheazy__actual-weather__wrapper--main__quality mt-20">
+        <div class="item">
+          <fieldset>
+            <legend>
+              <ngx-skeleton-loader
+                animation="progress-dark"
+                [theme]="{
+                  background: 'rgba(255,255,255, 0.25)',
+                  width: '75px'
+                }"
+              ></ngx-skeleton-loader>
+            </legend>
+            <div class="text-center">
+              <ngx-skeleton-loader
+                animation="progress-dark"
+                appearance="circle"
+                [theme]="{
+                  background: 'rgba(255,255,255, 0.25)',
+                  width: '30px',
+                  height: '30px'
+                }"
+              ></ngx-skeleton-loader>
+            </div>
+          </fieldset>
+        </div>
+        <div class="item">
+          <fieldset>
+            <legend>
+              <ngx-skeleton-loader
+                animation="progress-dark"
+                [theme]="{
+                  background: 'rgba(255,255,255, 0.25)',
+                  width: '125px'
+                }"
+              ></ngx-skeleton-loader>
+            </legend>
+            <div class="text-center">
+              <ngx-skeleton-loader
+                animation="progress-dark"
+                [theme]="{
+                  background: 'rgba(255,255,255, 0.25)',
+                  width: '75px'
+                }"
+              ></ngx-skeleton-loader>
+            </div>
+          </fieldset>
+        </div>
+      </div>
     </div>
     <div class="wheazy__actual-weather__wrapper--metadatas">
       <div class="item">
@@ -190,34 +238,48 @@
         </div>
       </div>
       <!-- TODO: next update -->
-      <!-- <div class="wheazy__actual-weather__wrapper--main__quality mt-20">
+      <div class="wheazy__actual-weather__wrapper--main__quality mt-20">
         <div class="item">
-          <p class="mat-p"><b>Indice UV</b></p>
-          <mat-chip-list>
-            <mat-chip
-              disableRipple
-              class="uv-index {{
-                uvIndex === 0 || uvIndex === 1 || uvIndex === 2
-                  ? 'low'
-                  : uvIndex === 3 || uvIndex === 4 || uvIndex === 5
-                  ? 'medium'
-                  : uvIndex === 6 || uvIndex === 7
-                  ? 'high'
-                  : 'very_high'
-              }}"
-              >{{ uvIndex }}</mat-chip
-            >
-          </mat-chip-list>
+          <fieldset>
+            <legend>
+              <b>Indice UV</b>
+            </legend>
+            <mat-chip-list class="center">
+              <mat-chip
+                disableRipple
+                class="uv-index {{
+                  uvIndex === 0 || uvIndex === 1 || uvIndex === 2
+                    ? 'low'
+                    : uvIndex === 3 || uvIndex === 4 || uvIndex === 5
+                    ? 'medium'
+                    : uvIndex === 6 || uvIndex === 7
+                    ? 'high'
+                    : 'very_high'
+                }}"
+                >{{ uvIndex }}</mat-chip
+              >
+            </mat-chip-list>
+          </fieldset>
         </div>
         <div class="item">
-          <p class="mat-p"><b>Qualité d'air globale</b></p>
-          <mat-chip-list>
-            <mat-chip disableRipple class="air-quality {{ globalAirQuality }}">{{
-              globalAirQuality === "excellent" ? "Excellente" : ""
-            }}</mat-chip>
-          </mat-chip-list>
+          <fieldset>
+            <legend><b>Qualité d'air globale</b></legend>
+            <mat-chip-list class="center">
+              <mat-chip
+                disableRipple
+                class="air-quality {{ globalAirQuality }}"
+                >{{
+                  globalAirQuality === "excellent"
+                    ? "Excellente"
+                    : globalAirQuality === "moderate"
+                    ? "Modérée"
+                    : "Dangereuse"
+                }}</mat-chip
+              >
+            </mat-chip-list>
+          </fieldset>
         </div>
-      </div> -->
+      </div>
     </div>
 
     <div class="wheazy__actual-weather__wrapper--metadatas">

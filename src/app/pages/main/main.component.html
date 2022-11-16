@@ -72,15 +72,22 @@
       mat-button
       [color]="isAirQualityShowed ? 'warn' : 'primary'"
       (click)="toggleAirQuality()"
-      disabled
     >
       <mat-icon>{{ isAirQualityShowed ? "close" : "masks" }}</mat-icon>
       {{ isAirQualityShowed ? "Masquer" : "Afficher" }} la qualité de l'air
     </button>
+    
+    <!-- 
+    <div class="mt-20">
+    <mat-slide-toggle (toggleChange)="toggleKeepAirQuality()" [checked]="keepAirQualityOpened">Garder la qualité de l'air ouverte</mat-slide-toggle>
+    </div> -->
   </div>
 
   <div class="mt-20" [@grow]="isAirQualityShowed ? 'open' : 'close'">
-    <app-air-quality [currentAirQuality]="currentAirQuality"></app-air-quality>
+    <app-air-quality
+      [currentAirQuality]="currentAirQuality"
+      [isLoading]="isCurrentWeatherLoading"
+    ></app-air-quality>
   </div>
 
   <div class="mt-20">

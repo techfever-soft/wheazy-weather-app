@@ -13,6 +13,12 @@ import { moveItemInArray } from '@angular/cdk/drag-drop';
 
 const savedLocationsState: SavedLocationPoint[] = [];
 
+
+/**
+ * Current location reducer
+ *
+ * @type {*}
+ */
 export const currentLocationReducer = createReducer(
   {},
   on(setCurrentLocationAction, (state: {}, action) => {
@@ -24,6 +30,12 @@ export const currentLocationReducer = createReducer(
   })
 );
 
+
+/**
+ * Saved locations reducer
+ *
+ * @type {*}
+ */
 export const savedLocationsReducer = createReducer(
   savedLocationsState,
   on(addSavedLocationAction, (state: SavedLocationPoint[], action) => {

@@ -4,6 +4,12 @@
   font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 48;
 }
 
+ngx-skeleton-loader {
+  span {
+    border-radius: 15px;
+  }
+}
+
 mat-toolbar {
   align-items: center;
   .brand-link {
@@ -12,9 +18,9 @@ mat-toolbar {
     border-radius: 10px;
     margin: 10px 0;
     &.active {
-     h1 {
-      font-weight: 900;
-     }
+      h1 {
+        font-weight: 900;
+      }
     }
     h1 {
       font-size: 25px;
@@ -48,13 +54,13 @@ mat-drawer-container {
     border-radius: 10px;
     margin: 10px auto;
     text-align: center;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     &.active {
       background: #ffc107;
       color: #333;
       h1 {
-      font-weight: 900;
-     }
+        font-weight: 900;
+      }
     }
     h1 {
       font-size: 25px;
@@ -163,6 +169,14 @@ mat-list-option {
   padding: 15px !important;
   .cdk-drag-handle {
     margin-right: 10px;
+  }
+}
+
+mat-chip-list {
+  &.center {
+    .mat-chip-list-wrapper {
+      place-content: center !important;
+    }
   }
 }
 

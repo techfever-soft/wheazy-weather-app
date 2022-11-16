@@ -1,5 +1,33 @@
 # Wheazy
 
+Provides a friendly interface and actual weather + forecast + air pollution into a dashboard.
+
+You can easily integrate it to your local webserver for a homestation, smart-mirror... for example. 
+
+Note: UI Language is in French
+
+## => [DEMO](https://wheazy.web.app/main)
+
+Please check the about page to view the changelogs and TODO tasks.
+
+## Install
+
+Simply install Node.js on your environment then run :
+
+`cd .\wheazy-weather-app`
+
+`npm install`
+
+## Info
+
+Feel free to request some features or forking this project.
+
+Please if you like this project, feel free to donate at our [Patreon](https://patreon.com/techfever)
+
+Project created by [TechFever](https://techfever.dev/) team
+
+#
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.18.
 
 ## Development server

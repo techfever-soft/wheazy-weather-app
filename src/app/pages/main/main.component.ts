@@ -29,6 +29,7 @@ export class MainComponent implements OnInit {
   public isCurrentWeatherLoading: boolean = true;
 
   public isAirQualityShowed: boolean = false;
+  public keepAirQualityOpened: boolean = true;
 
   public showDebug: Observable<boolean>;
   public unit: Observable<string>;
@@ -86,10 +87,18 @@ export class MainComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.keepAirQualityOpened) {
+      this.isAirQualityShowed = true;
+    }
+  }
 
   public toggleAirQuality() {
     this.isAirQualityShowed = !this.isAirQualityShowed;
+  }
+
+  public toggleKeepAirQuality() {
+    this.keepAirQualityOpened = !this.keepAirQualityOpened;
   }
 
   public selectLocation(location: SavedLocationPoint): void {

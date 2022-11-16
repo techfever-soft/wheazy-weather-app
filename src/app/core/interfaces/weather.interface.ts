@@ -65,17 +65,47 @@ export interface AirQuality {
   };
   // TODO: reform others
   gases: {
-    carbonMonoxide: number;
-    nitrogenDioxide: number;
-    sulphurDioxide: number;
-    ozone: number;
+    carbonMonoxide: {
+      status: string;
+      value: number;
+    }
+    nitrogenDioxide: {
+      status: string;
+      value: number;
+    }
+    sulphurDioxide: {
+      status: string;
+      value: number;
+    }
+    ozone: {
+      status: string;
+      value: number;
+    }
   };
   pollens: {
-    alder: number;
-    birch: number;
-    grass: number;
-    mugwort: number;
-    olive: number;
-    ragweed: number;
+    alder: {
+      status: string;
+      value: number;
+    }
+    birch: {
+      status: string;
+      value: number;
+    }
+    grass: {
+      status: string;
+      value: number;
+    }
+    mugwort: {
+      status: string;
+      value: number;
+    }
+    olive: {
+      status: string;
+      value: number;
+    }
+    ragweed: {
+      status: string;
+      value: number;
+    }
   };
 }

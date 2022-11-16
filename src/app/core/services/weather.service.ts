@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
-import moment from 'moment';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import * as SunCalc from 'suncalc';
-import {
-  LocationPoint,
-  SavedLocationPoint,
-} from '../interfaces/location.interface';
+import { SavedLocationPoint } from '../interfaces/location.interface';
 import {
   AirQuality,
   CurrentWeather,
@@ -15,6 +10,9 @@ import {
 } from '../interfaces/weather.interface';
 import { ApiService } from './api.service';
 import { LocationService } from './location.service';
+
+import * as SunCalc from 'suncalc';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root',
@@ -32,24 +30,22 @@ export class WeatherService {
     0
   );
 
-  private currentWeather$: Subject<CurrentWeather> = new Subject();
-  private currentHourlyWeather$: Subject<HourWeather[]> = new Subject();
-  private currentDaysWeather$: Subject<DayWeather[]> = new Subject();
-
-  private currentAirQuality$: Subject<AirQuality> = new Subject();
-
-  // ANCHOR: Settings
   private unit$: BehaviorSubject<string> = new BehaviorSubject('celcius');
   private showDebug$ = new BehaviorSubject(false);
 
+  private currentWeather$: Subject<CurrentWeather> = new Subject();
+  private currentHourlyWeather$: Subject<HourWeather[]> = new Subject();
+  private currentDaysWeather$: Subject<DayWeather[]> = new Subject();
+  private currentAirQuality$: Subject<AirQuality> = new Subject();
+  
   constructor(
     private locationService: LocationService,
     private apiService: ApiService
   ) {
+    // NOTE: First init of weather and daytime
     this.setActualDayTime();
     this.setActualSeason();
 
-    // NOTE: On current location changed
     this.locationService
       .getCurrentLocation()
       .subscribe((location: SavedLocationPoint) => {
@@ -65,24 +61,20 @@ export class WeatherService {
     this.showDebug$.next(debug);
   }
 
-  public getDebug() {
-    return this.showDebug$.asObservable();
-  }
 
-  public getUnit() {
-    return this.unit$.asObservable();
-  }
-
-  public getAirQuality(): Observable<AirQuality> {
-    return this.currentAirQuality$.asObservable();
-  }
 
   // public set showDebug(debug: boolean) {
   //   this.showDebug$.next(debug);
   // }
 
+  
+  /**
+   * Prepare to fetch the weather at a precise location
+   *
+   * @public
+   * @param SavedLocationPoint location
+   */
   public fetchWeatherAtLocation(location: SavedLocationPoint): void {
-    // ANCHOR : get current weather
     this.apiService
       .fetchCurrentWeather(location)
       .then((rawCurrentWeather: any) => {
@@ -92,7 +84,6 @@ export class WeatherService {
         this.currentWeather$.next(finalCurrentWeather);
       });
 
-    // ANCHOR : get current hour weathers
     this.apiService.fetchHoursWeather(location).then((rawHoursWeather: any) => {
       const finalHourlyWeather: HourWeather[] =
         this.transformHourlyWeather(rawHoursWeather);
@@ -100,7 +91,6 @@ export class WeatherService {
       this.currentHourlyWeather$.next(finalHourlyWeather);
     });
 
-    // ANCHOR : get current week weather
     this.apiService.fetchWeekWeather(location).then((rawWeekWeather: any) => {
       const finalWeekWeather: DayWeather[] =
         this.transformWeekWeather(rawWeekWeather);
@@ -108,7 +98,6 @@ export class WeatherService {
       this.currentDaysWeather$.next(finalWeekWeather);
     });
 
-    // ANCHOR: get actual air quality
     this.apiService.fetchAirQuality(location).then((res: any) => {
       const finalAirQuality: AirQuality = this.transformAirQuality(res);
 
@@ -116,59 +105,156 @@ export class WeatherService {
     });
   }
 
+  /**
+   *  Transform the raw air quality data into mapped object
+   *
+   * @private
+   * @param any rawAirQuality
+   * @returns AirQuality
+   */
   private transformAirQuality(rawAirQuality: any): AirQuality {
-    let score = 100;
     let quality = 'excellent';
-
-    // if (rawAirQuality.particles.pm2_5 && rawAirQuality.particles.pm10) {
-    //   score = score - 10;
-    // }
-    // if (rawAirQuality.gases.carbonMonoxide) {
-    //   if (rawAirQuality.gases.carbonMonoxide >= 200) {
-    //     score = score - 20;
-    //   }
-    //   if (rawAirQuality.gases.carbonMonoxide >= 300) {
-    //     score = score - 35;
-    //   }
-    // }
-    // if (rawAirQuality.gases.nitrogenDioxide) {
-    // }
-
-    // TODO: calculate score and switch it
-
-    // switch(score) {}
 
     const airQuality: AirQuality = {
       globalQuality: quality,
       uvIndex: rawAirQuality.uvIndex,
       dusts: {
         sand: {
-          status: rawAirQuality.dusts.sand > 10 ? 'high' : 'low',
+          status:
+            rawAirQuality.dusts.sand <= 50
+              ? 'low'
+              : rawAirQuality.dusts.sand <= 100
+              ? 'medium'
+              : 'high',
           value: rawAirQuality.dusts.sand,
         },
       },
       particles: {
         pm10: {
-          status: rawAirQuality.particles.pm10 > 10 ? 'medium' : 'low',
+          status:
+            rawAirQuality.particles.pm10 <= 100
+              ? 'low'
+              : rawAirQuality.particles.pm10 <= 250
+              ? 'medium'
+              : 'high',
           value: rawAirQuality.particles.pm10,
         },
         pm2_5: {
-          status: rawAirQuality.particles.pm2_5 > 10 ? 'medium' : 'low',
+          status:
+            rawAirQuality.particles.pm2_5 <= 60
+              ? 'low'
+              : rawAirQuality.particles.pm2_5 <= 90
+              ? 'medium'
+              : 'high',
           value: rawAirQuality.particles.pm2_5,
         },
       },
-      // TODO: reform others
       pollens: {
-        ...rawAirQuality.pollens,
+        alder: {
+          status: '',
+          value: rawAirQuality.pollens.alder,
+        },
+        birch: {
+          status: '',
+          value: rawAirQuality.pollens.birch,
+        },
+        grass: {
+          status: '',
+          value: rawAirQuality.pollens.grass,
+        },
+        mugwort: {
+          status: '',
+          value: rawAirQuality.pollens.mugwort,
+        },
+        olive: {
+          status: '',
+          value: rawAirQuality.pollens.olive,
+        },
+        ragweed: {
+          status: '',
+          value: rawAirQuality.pollens.ragweed,
+        },
       },
       gases: {
-        ...rawAirQuality.gases,
+        carbonMonoxide: {
+          status:
+            rawAirQuality.gases.carbonMonoxide <= 150
+              ? 'low'
+              : rawAirQuality.gases.carbonMonoxide <= 600
+              ? 'medium'
+              : 'high',
+          value: rawAirQuality.gases.carbonMonoxide,
+        },
+        nitrogenDioxide: {
+          status:
+            rawAirQuality.gases.nitrogenDioxide <= 250
+              ? 'low'
+              : rawAirQuality.gases.nitrogenDioxide <= 1500
+              ? 'medium'
+              : 'high',
+          value: rawAirQuality.gases.nitrogenDioxide,
+        },
+        sulphurDioxide: {
+          status:
+            rawAirQuality.gases.sulphurDioxide <= 100
+              ? 'low'
+              : rawAirQuality.gases.sulphurDioxide <= 500
+              ? 'medium'
+              : 'high',
+          value: rawAirQuality.gases.sulphurDioxide,
+        },
+        ozone: {
+          status:
+            rawAirQuality.gases.ozone <= 50
+              ? 'low'
+              : rawAirQuality.gases.ozone <= 125
+              ? 'medium'
+              : 'high',
+          value: rawAirQuality.gases.ozone,
+        },
       },
     };
+
+    let lowCount = 0;
+    let mediumCount = 0;
+    let highCount = 0;
+
+    let qualityObj = Object.entries(airQuality);
+    qualityObj.forEach((comp) => {
+      let statusObj = Object.entries(comp[1]);
+      statusObj.forEach((s) => {
+        let status = (s[1] as any).status;
+        if (status === 'low') {
+          lowCount = lowCount + 1;
+        }
+        if (status === 'medium') {
+          mediumCount = mediumCount + 1;
+        }
+        if (status === 'high') {
+          highCount = highCount + 1;
+        }
+      });
+    });
+
+    if (mediumCount >= 2 || highCount === 1) {
+      quality = 'moderate';
+    }
+    if (mediumCount > 2 || highCount > 1) {
+      quality = 'dangerous';
+    }
+
+    airQuality.globalQuality = quality;
 
     return airQuality;
   }
 
+  /**
+   * Transforms raw week weather into an array of mapped days object
+   *
+   * @private
+   * @param any rawWeekWeather
+   * @returns DayWeather[]
+   */
   private transformWeekWeather(rawWeekWeather: any): DayWeather[] {
     let newWeekWeather: DayWeather[] = [];
 
@@ -196,6 +282,13 @@ export class WeatherService {
     return newWeekWeather;
   }
 
+  /**
+   * Transforms the raw hourly weather into mapped hourly object
+   *
+   * @private
+   * @param any rawHoursWeather
+   * @returns HourWeather[]
+   */
   private transformHourlyWeather(rawHoursWeather: any): HourWeather[] {
     let newHourWeather: HourWeather[] = [];
 
@@ -221,6 +314,14 @@ export class WeatherService {
     return newHourWeather;
   }
 
+  /**
+   * Transforms the raw current weather into mapped current weather object
+   *
+   * @private
+   * @param SavedLocationPoint location
+   * @param any rawWeather
+   * @returns CurrentWeather
+   */
   private transformCurrentWeather(
     location: SavedLocationPoint,
     rawWeather: any
@@ -240,6 +341,14 @@ export class WeatherService {
     return currentWeather;
   }
 
+  /**
+   * Transforms the weather code into Material icon, defines if it's day or night by setting timestamp
+   *
+   * @private
+   * @param number code
+   * @param ?moment.Moment [timestamp]
+   * @returns string
+   */
   private translateWeatherIcon(
     code: number,
     timestamp?: moment.Moment
@@ -294,6 +403,13 @@ export class WeatherService {
     return icon ? icon : 'help';
   }
 
+  /**
+   * Transforms the weather code by a readable description
+   *
+   * @private
+   * @param number code
+   * @returns string
+   */
   private translateWeatherDescription(code: number) {
     let description = '';
 
@@ -328,16 +444,38 @@ export class WeatherService {
     return description;
   }
 
-  public setActualDayTime() {
+  /**
+   * Set the actual daytime (for the sun position pricipally)
+   * Can be changed in the debug panel
+   *
+   * @public
+   * @returns void
+   */
+  public setActualDayTime(): void {
     this.currentDayTimeAsNumber$.next(moment().get('hour'));
     this.currentDayTime = this.currentDayTimeAsNumber$.getValue();
   }
 
-  public setActualSeason() {
+  /**
+   * Set the actual season
+   * Can be changed in the debug panel
+   *
+   * @public
+   * @returns void
+   */
+  public setActualSeason(): void {
     this.currentSeasonAsNumber$.next(moment().get('month'));
     this.currentSeason = this.currentSeasonAsNumber$.getValue();
   }
 
+  
+  /**
+   * Set the actual season by providing a month number
+   * Can be changed in the debug panel
+   * 
+   * @public
+   * @type {number}
+   */
   public set currentSeason(month: number) {
     const now = moment();
 
@@ -385,35 +523,49 @@ export class WeatherService {
     this.currentSeason$.next(season);
   }
 
+  
+  /**
+   * Set the current daytime by providing the time on 24 hours
+   * Can be set in the debug panel
+   *
+   * @public
+   * @type number
+   */
   public set currentDayTime(time: number) {
     let currentState = '';
 
     if (time) {
       this.currentDayTimeAsNumber$.next(time);
 
-      if (time == 1 || time == 2 || time == 3) {
+      if (time == 1 || time == 2 || time == 3 || time == 4 || time == 5) {
         currentState = 'nadir';
       }
-      if (time == 4 || time == 5 || time == 6) {
+      if (time == 6 || time == 7 || time == 8) {
         currentState = 'dawn';
       }
-      if (time == 7 || time == 8 || time == 9) {
+      if (time == 9 || time == 10) {
         currentState = 'nauticalDawn';
       }
-      if (time == 10 || time == 11 || time == 12) {
+      if (time == 11 || time == 12) {
         currentState = 'dusk';
       }
-      if (time == 13 || time == 14 || time == 15) {
+      if (time == 13 || time == 14) {
         currentState = 'goldenHour';
       }
-      if (time == 16 || time == 17 || time == 18) {
+      if (time == 15 || time == 16) {
         currentState = 'sunsetStart';
       }
-      if (time == 19 || time == 20 || time == 21) {
-        currentState = 'nauticalDusk';
+      if (time == 17 || time == 18) {
+        currentState = 'nauticalDawn';
       }
-      if (time == 22 || time == 23 || time == 24) {
+      if (time == 19 || time == 20) {
+        currentState = 'dawn';
+      }
+      if (time == 21 || time == 22) {
         currentState = 'night';
+      }
+      if (time == 23 || time == 24) {
+        currentState = 'nadir';
       }
 
       this.currentDayTime$.next(currentState);
@@ -436,6 +588,16 @@ export class WeatherService {
     }
   }
 
+
+  
+  /**
+   * Get the sun position by providing the local time and location point
+   *
+   * @public
+   * @param Date time
+   * @param SavedLocationPoint point
+   * @returns Promise<string>
+   */
   public getSunStateAtLocation(
     time: Date,
     point: SavedLocationPoint
@@ -525,6 +687,18 @@ export class WeatherService {
         reject('currentState not detected');
       }
     });
+  }
+
+  public getDebug(): Observable<boolean> {
+    return this.showDebug$.asObservable();
+  }
+
+  public getUnit(): Observable<string> {
+    return this.unit$.asObservable();
+  }
+
+  public getAirQuality(): Observable<AirQuality> {
+    return this.currentAirQuality$.asObservable();
   }
 
   public getCurrentDayTime(): Observable<string> {

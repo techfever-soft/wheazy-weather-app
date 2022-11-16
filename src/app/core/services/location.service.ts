@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { AddSavedLocationDialogComponent } from 'src/app/pages/main/add-saved-location-dialog/add-saved-location-dialog.component';
 import {
   addSavedLocationAction,
@@ -13,42 +13,33 @@ import {
   deleteSavedLocationAction,
 } from '../state/location.action';
 import { SavedLocationPoint } from '../interfaces/location.interface';
-import { AppService } from './app.service';
 import {
   currentLocationsSelector,
   savedLocationsSelector,
 } from '../state/location.selectors';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocationService {
-  private savedLocations$: Observable<SavedLocationPoint[]> = this.store.select(
-    savedLocationsSelector
-  );
-  private currentLocation$: Observable<SavedLocationPoint> = this.store.select(
-    currentLocationsSelector
-  );
-
-  // ANCHOR: settings
   private maxLocations$: BehaviorSubject<number> = new BehaviorSubject(5);
 
   constructor(
     private matDialog: MatDialog,
-    private app: AppService,
     private store: Store<{
       savedLocations: SavedLocationPoint[];
       currentLocation: SavedLocationPoint;
     }>
   ) {
+    // NOTE: Getting our data with NgRX, data is located in the window.localStorage
     this.store.dispatch(getSavedLocationsAction());
     this.store.dispatch(getCurrentLocationAction());
 
+    // NOTE: for debugging
     // this.savedLocations$.subscribe((state) => {
     //   console.log('savedLocations =>', state);
     // });
-
     // this.currentLocation$.subscribe((state) => {
     //   console.log('currentLocation =>', state);
     // });
@@ -58,37 +49,89 @@ export class LocationService {
     this.maxLocations$.next(max);
   }
 
-  public moveLocation(event: CdkDragDrop<SavedLocationPoint>) {
+  /**
+   * Drag and drop a location in the saved locations list
+   *
+   * @public
+   * @param CdkDragDrop<SavedLocationPoint> event
+   * @returns void
+   */
+  public moveLocation(event: CdkDragDrop<SavedLocationPoint>): void {
     this.store.dispatch(moveSavedLocationsAction(event));
   }
 
-  public setCurrentLocation(location: SavedLocationPoint) {
+  /**
+   * Setting the current location
+   *
+   * @public
+   * @param SavedLocationPoint location
+   * @returns void
+   */
+  public setCurrentLocation(location: SavedLocationPoint): void {
     this.store.dispatch(setSelectedSavedLocationAction(location));
     this.store.dispatch(setCurrentLocationAction(location));
   }
 
-  public addSavedLocation(location: SavedLocationPoint) {
+  /**
+   * Add a location in the saved locations list
+   *
+   * @public
+   * @param SavedLocationPoint location
+   * @returns void
+   */
+  public addSavedLocation(location: SavedLocationPoint): void {
     this.store.dispatch(addSavedLocationAction(location));
   }
 
-  public deleteSavedLocation(index: number) {
+  /**
+   * Delete a location in the saved locations list
+   *
+   * @public
+   * @param number index
+   * @returns void
+   */
+  public deleteSavedLocation(index: number): void {
     this.store.dispatch(deleteSavedLocationAction(index));
   }
 
-  public openAddLocationDialog() {
+  /**
+   * Open the dialog to add a new location into the saved locations list
+   *
+   * @public
+   * @returns void
+   */
+  public openAddLocationDialog(): void {
     this.matDialog.open(AddSavedLocationDialogComponent, {
       // maxHeight: '500px',
     });
   }
 
+  /**
+   *  Get the max number of allowed saved locations
+   *
+   * @public
+   * @returns Observable<number>
+   */
   public getMaxLocations(): Observable<number> {
     return this.maxLocations$.asObservable();
   }
 
+  /**
+   * Get the active current location
+   *
+   * @public
+   * @returns Observable<SavedLocationPoint>
+   */
   public getCurrentLocation(): Observable<SavedLocationPoint> {
     return this.store.select(currentLocationsSelector);
   }
 
+  /**
+   * Get the saved locations list
+   *
+   * @public
+   * @returns Observable<SavedLocationPoint[]>
+   */
   public getSavedLocations(): Observable<SavedLocationPoint[]> {
     return this.store.select(savedLocationsSelector);
   }

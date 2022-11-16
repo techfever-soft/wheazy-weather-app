@@ -9,6 +9,7 @@ import { AirQuality } from 'src/app/core/interfaces/weather.interface';
 })
 export class AirQualityComponent implements OnInit {
   @Input('currentAirQuality') currentAirQuality?: Observable<AirQuality>;
+  @Input('isLoading') isLoading?: boolean;
 
   constructor() { }
 

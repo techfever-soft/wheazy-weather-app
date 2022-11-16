@@ -140,7 +140,7 @@
 
     &.nauticalDawn {
       background: radial-gradient(
-        circle at 50% 50%,
+        circle at 50% 75%,
         darken(orange, 15%) 10%,
         rgba(12, 87, 172, 0.753) 60%
       );
@@ -215,7 +215,7 @@
             mat-chip-list {
               margin-top: 10px;
               mat-chip {
-                color: #333;
+                color: #fff;
                 font-weight: 600;
                 &.uv-index {
                   &.low {

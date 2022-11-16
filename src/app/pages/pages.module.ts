@@ -16,6 +16,7 @@ import { GoogleMapsModule } from '@angular/google-maps';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AirQualityComponent } from './main/air-quality/air-quality.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { AirQualityComponent } from './main/air-quality/air-quality.component';
     NgxSkeletonLoaderModule,
     MomentModule,
     GoogleMapsModule,
+    FontAwesomeModule,
   ],
 })
 export class PagesModule {}

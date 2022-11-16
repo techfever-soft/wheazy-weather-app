@@ -16,7 +16,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import {
   ActionReducer,
-  ActionReducerMap,
   MetaReducer,
   StoreModule,
 } from '@ngrx/store';
@@ -25,6 +24,7 @@ import {
   savedLocationsReducer,
 } from './core/state/location.reducer';
 import { localStorageSync } from 'ngrx-store-localstorage';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 export function localStorageSyncReducer(
   reducer: ActionReducer<any>
@@ -51,6 +51,7 @@ const metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
     MomentModule,
     NgxSkeletonLoaderModule,
     PagesModule,
+    FontAwesomeModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the app is stable

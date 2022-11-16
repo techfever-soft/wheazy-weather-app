@@ -2,6 +2,8 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { createAction, props } from '@ngrx/store';
 import { SavedLocationPoint } from '../interfaces/location.interface';
 
+// ANCHOR: Saved locations
+
 export const addSavedLocationAction = createAction(
   '[Location] Added location',
   props<SavedLocationPoint>()
@@ -26,7 +28,7 @@ export const setSelectedSavedLocationAction = createAction(
   props<SavedLocationPoint>()
 );
 
-// Current location
+// ANCHOR: Current location
 
 export const setCurrentLocationAction = createAction(
   '[Location] Setted current location',
