@@ -3,7 +3,8 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  GMAPS_API_KEY: "AIzaSyC_hauewhaMW9LzWrFFOvv02gv1SJZ_8xg",
 };
 
 /*

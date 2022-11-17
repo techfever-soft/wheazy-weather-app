@@ -12,9 +12,8 @@ import {
   Geolocation,
   Geoposition,
 } from '@awesome-cordova-plugins/geolocation/ngx';
-import { v4 as uuidv4 } from 'uuid';
 import { LocationService } from 'src/app/core/services/location.service';
-import { AppService } from 'src/app/core/services/app.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-add-saved-location-dialog',
@@ -55,7 +54,6 @@ export class AddSavedLocationDialogComponent implements OnInit {
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddSavedLocationDialogComponent>,
     private locationService: LocationService,
-    private app: AppService
   ) {
     this.newLocationForm = this.fb.group({
       place: ['', Validators.required],
@@ -65,7 +63,9 @@ export class AddSavedLocationDialogComponent implements OnInit {
   ngOnInit() {
     this.mapsLoaded = this.httpClient
       .jsonp(
-        'https://maps.googleapis.com/maps/api/js?key=AIzaSyC_hauewhaMW9LzWrFFOvv02gv1SJZ_8xg&libraries=places',
+        'https://maps.googleapis.com/maps/api/js?key=' +
+          environment.GMAPS_API_KEY +
+          '&libraries=places',
         'callback'
       )
       .pipe(
@@ -221,7 +221,7 @@ export class AddSavedLocationDialogComponent implements OnInit {
       console.log(this.pickedPlace);
 
       this.locationService.addSavedLocation(this.pickedPlace);
-      
+
       this.dialogRef.close();
     }
   }

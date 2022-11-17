@@ -1,4 +1,4 @@
-# Wheazy
+# Wheazy (Wheather app) 🌞
 
 Provides a friendly interface and actual weather + forecast + air pollution into a dashboard.
 
@@ -6,19 +6,29 @@ You can easily integrate it to your local webserver for a homestation, smart-mir
 
 Note: UI Language is in French
 
-## => [DEMO](https://wheazy.web.app/main)
+## 🏗️ [DEMO](https://wheazy.web.app/main)
 
 Please check the about page to view the changelogs and TODO tasks.
 
-## Install
+## 🛠️ Install
 
-Simply install Node.js on your environment then run :
+- (optionnally) Create an API Key for Google Maps then replace it in :
+
+`cd .\wheazy-weather-app\environments\`
+
+at `environment.ts` and `environment.prod.ts` 
+
+replace `GMAPS_API_KEY`
+
+- Simply install Node.js on your environment then run :
 
 `cd .\wheazy-weather-app`
 
 `npm install`
 
-## Info
+`ng serve`
+
+## ℹ️ Info
 
 Feel free to request some features or forking this project.
 
